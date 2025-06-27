@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import express from 'express';
-import { getIngredients } from '../controllers/ingredient.controller.js';
+import { getIngredients } from '../controllers/ingredient.js';
 
 const router = Router();
 const jsonParser = express.json();
