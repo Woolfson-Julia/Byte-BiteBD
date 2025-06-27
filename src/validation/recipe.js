@@ -1,17 +1,21 @@
-// import Joi from 'joi';
+import Joi from 'joi';
 
-// export const contactSchema = Joi.object({
-//   name: Joi.string().min(3).max(20).required(),
-//   phoneNumber: Joi.string().min(3).max(20).required(),
-//   email: Joi.string().min(3).max(20),
-//   isFavourite: Joi.boolean(),
-//   contactType: Joi.string().valid('work', 'home', 'personal').required(),
-// });
+// Joi-схема для інгредієнтів у рецепті
+const ingredientSchema = Joi.object({
+  id: Joi.string().required(),
+  measure: Joi.string().required(),
+});
 
-// export const updateContactSchema = Joi.object({
-//   name: Joi.string().min(3).max(20),
-//   phoneNumber: Joi.string().min(3).max(20),
-//   email: Joi.string().min(3).max(20),
-//   isFavourite: Joi.boolean(),
-//   contactType: Joi.string().valid('work', 'home', 'personal'),
-// });
+// Joi-схема для створення нового рецепту
+export const createRecipeSchema = Joi.object({
+  name: Joi.string().max(64).required(),
+  decr: Joi.string().max(200).required(),
+  cookiesTime: Joi.number().integer().min(1).max(360).required(),
+  cals: Joi.number().integer().min(1).max(10000).optional(),
+  category: Joi.string().required(),
+  ingredients: Joi.array().items(ingredientSchema).min(2).max(16).required(),
+  ingredientAmount: Joi.number().integer().min(2).max(16).required(),
+  instruction: Joi.string().max(1200).required(),
+  recipeImg: Joi.string().uri().optional(),
+  // owner не приймаємо від клієнта, беремо з токена
+});

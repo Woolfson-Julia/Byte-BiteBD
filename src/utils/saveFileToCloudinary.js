@@ -1,10 +1,9 @@
-import cloudinary from 'cloudinary';
-import fs from 'node:fs/promises';
-
+import { v2 as cloudinary } from 'cloudinary';
+import fs from 'fs/promises';
 import { getEnvVar } from './getEnvVar.js';
 import { CLOUDINARY } from '../constants/index.js';
 
-cloudinary.v2.config({
+cloudinary.config({
   secure: true,
   cloud_name: getEnvVar(CLOUDINARY.CLOUD_NAME),
   api_key: getEnvVar(CLOUDINARY.API_KEY),
@@ -12,8 +11,8 @@ cloudinary.v2.config({
 });
 
 export const saveFileToCloudinary = async (file) => {
-  const response = await cloudinary.v2.uploader.upload(file.path);
-  await fs.unlink(file.path);
+  const response = await cloudinary.uploader.upload(file.path);
+  await fs.unlink(file.path); // видаляємо тимчасовий файл після завантаження
 
   return response.secure_url;
 };

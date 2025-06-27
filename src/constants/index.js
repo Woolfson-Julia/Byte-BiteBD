@@ -3,7 +3,11 @@ import path from 'node:path';
 export const RECIPE_SORT_KEYS = [
   '_id',
   'name',
-  //допишете остальное
+  'cals',
+  'cookiesTime',
+  'category',
+  'createdAt',
+  'updatedAt',
 ];
 
 export const SORT_ORDER = {
