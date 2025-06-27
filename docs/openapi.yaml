@@ -16,6 +16,8 @@ tags:
     description: Operations about ingredients.
   - name: Auth
     description: Auth operations.
+  - name: Users
+    description: Operations about users.
 servers:
   - url: http://127.0.0.1:3000/api
 paths:
@@ -37,6 +39,9 @@ paths:
   /auth/refresh:
     post:
       $ref: ../swagger/paths/auth/refresh.yaml
+  /users/current:
+    get:
+      $ref: ../swagger/paths/users/get.yaml
 components:
   securitySchemes:
     bearerAuth:
