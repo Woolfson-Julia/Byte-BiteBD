@@ -3,7 +3,7 @@ export const getUserCurrentController = async (req, res) => {
 
   res.status(200).json({
     status: 200,
-    message: 'Successfully fount user!',
+    message: 'Successfully found user!',
     data: user,
   });
 };
