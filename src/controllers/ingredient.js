@@ -1,6 +1,6 @@
 import createHttpError from 'http-errors';
 
-import { getAllIngredients } from '../services/ingredient.service.js';
+import { getAllIngredients } from '../services/ingredient.js';
 export const getIngredients = async (req, res, next) => {
   try {
     const ingredients = await getAllIngredients();

@@ -1,6 +1,6 @@
 import createHttpError from 'http-errors';
 
-import { getAllCategories } from '../services/category.service.js';
+import { getAllCategories } from '../services/category.js';
 
 export const getCategories = async (req, res, next) => {
   try {
