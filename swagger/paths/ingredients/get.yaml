@@ -1,0 +1,52 @@
+operationId: getIngredients
+summary: Retrieve a list of ingredients
+tags:
+  - Ingredients
+description: Returns an array of ingredients. Returns 404 if no ingredients found.
+security: []
+responses:
+  '200':
+    description: Successfully retrieved list of ingredients
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully found ingredients!
+            data:
+              type: array
+              items:
+                $ref: '../../components/schemas/ingredient.yaml#/Ingredient'
+
+  '404':
+    description: Ingredients not found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: No ingredients found
+
+  '500':
+    description: Internal server error
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 500
+            message:
+              type: string
+              example: 'Internal server error: Database connection failed'
