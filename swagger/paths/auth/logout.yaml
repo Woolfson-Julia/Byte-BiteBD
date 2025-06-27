@@ -1,14 +1,14 @@
 tags:
   - Auth
-summary: User logout
+summary: logout user
 operationId: logoutUser
-description:  Logs out the user by clearing the session or tokens.
-security:
-  - bearerAuth: []
+description: |
+  Logs out the authenticated user by deleting the session and clearing cookies.
+
+  ⚠️ **Swagger UI does not store cookies. Please use Postman or your frontend to test this route properly.**
+security: []
 responses:
   '204':
-    description: User successfully logged out (no content)
-  '401':
-    $ref: '../../components/responses/401.yaml'
+    description: Successfully logged out. No content is returned.
   '500':
-    $ref: '../../components/responses/500.yaml'
+    $ref: ../../components/responses/500.yaml

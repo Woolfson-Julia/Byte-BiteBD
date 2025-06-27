@@ -1,12 +1,10 @@
 tags:
   - Auth
-summary: User login
+summary: Login user
 operationId: loginUser
-description: Authenticate user and return access token
-security:
-  - bearerAuth: []
+description: Authenticate an existing user and return access token with user data
+security: []
 requestBody:
-  required: true
   content:
     application/json:
       schema:
@@ -16,36 +14,45 @@ requestBody:
           - password
         properties:
           email:
+            description: User's email
             type: string
-            example: user@example.com
+            example: john123@gmail.com
           password:
+            description: User's password
             type: string
-            example: 1234566JJ
+            example: examplepwd123
 responses:
   '200':
-    description: Successfully logged in an user!
+    description: Successfully authenticated the user and returned an access token
     content:
       application/json:
         schema:
           type: object
-          required: [status, message, data]
+          required:
+            - status
+            - message
+            - data
           properties:
             status:
               type: integer
               example: 200
             message:
               type: string
-              example: Successfully registered a user!
+              example: Successfully logged in a user!
             data:
               type: object
-              required: [accessToken]
+              required:
+                - user
+                - accessToken
               properties:
+                user:
+                  $ref: ../../components/schemas/user.yaml
                 accessToken:
                   type: string
-                  example: Y12l/GjxtA2cV69sXhLsdqncNQCv76u2Mm0r8Fvs
+                  example: msCUebr6BGhZcOO0qNLU6JbWd0AdmBKYadwnknjq
   '400':
-    $ref: '../../components/responses/400.yaml'
+    $ref: ../../components/responses/400.yaml
   '401':
-    $ref: '../../components/responses/401.yaml'
+    $ref: ../../components/responses/401.yaml
   '500':
-    $ref: '../../components/responses/500.yaml'
+    $ref: ../../components/responses/500.yaml
