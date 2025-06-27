@@ -1,0 +1,30 @@
+Ingredient:
+  type: object
+  required:
+    - _id
+    - name
+    - desc
+    - img
+    - createdAt
+    - updatedAt
+  properties:
+    _id:
+      type: string
+      example: '665d14a36a70b4794fbcab34'
+    name:
+      type: string
+      example: 'Egg'
+    desc:
+      type: string
+      example: 'A fresh organic egg'
+    img:
+      type: string
+      example: 'https://example.com/images/egg.jpg'
+    createdAt:
+      type: string
+      format: date-time
+      example: '2024-06-01T12:00:00.000Z'
+    updatedAt:
+      type: string
+      format: date-time
+      example: '2024-06-01T12:30:00.000Z'
