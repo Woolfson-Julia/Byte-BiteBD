@@ -1,0 +1,32 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: Byte&Bite app
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  description: >
+    A RESTful API for managing recipes.
+    Supports user registration, authentication,
+    and password reset via email.
+tags:
+  - name: Categories
+    description: Operations about categories.
+  - name: Ingredients
+    description: Operations about ingredients.
+  - name: Auth
+    description: Auth operations.
+servers:
+  - url: http://127.0.0.1:3000
+paths:
+  /categories:
+    get:
+      $ref: '../swagger/paths/categories/get.yaml'
+  /ingredients:
+    get:
+      $ref: '../swagger/paths/ingredients/get.yaml'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
