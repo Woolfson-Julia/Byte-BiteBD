@@ -24,7 +24,7 @@ export const setupServer = () => {
 
   app.use('/api-docs', swaggerDocs());
   app.use(cookieParser());
-  app.use(router);
+  app.use('/api', router);
 
   app.use(notFoundHandler);
   app.use(errorHandler);
