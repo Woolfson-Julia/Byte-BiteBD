@@ -5,7 +5,7 @@ import { IngredientsCollection } from '../models/ingredientSchema.js';
 export const getAllIngredients = async () => {
   try {
     const ingredients = await IngredientsCollection.find();
-    console.log(ingredients);
+
     return ingredients;
   } catch (error) {
     throw createHttpError(

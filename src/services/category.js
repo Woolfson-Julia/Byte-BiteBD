@@ -10,3 +10,4 @@ export const getAllCategories = async () => {
     throw createHttpError(500, `Failed to fetch categories - ${error.message}`);
   }
 };
+

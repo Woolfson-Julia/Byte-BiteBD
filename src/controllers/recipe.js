@@ -81,24 +81,13 @@ export const createRecipe = async (req, res, next) => {
   const ownerId = req.user._id;
   const photoUrl = req.file ? await getPhotoUrl(req.file) : null;
 
-    // Парсимо ingredients з рядка в масив об'єктів
-  let ingredients = [];
-  if (req.body.ingredients) {
-      try {
-        ingredients = JSON.parse(req.body.ingredients);
-      } catch {
-        return res.status(400).json({ message: 'Invalid ingredients format' });
-      }
-    }
-
     const newRecipeData = {
-      ...req.body,
-      ingredients,
-      owner: ownerId,
-      recipeImg: photoUrl,
-      cookiesTime: Number(req.body.cookiesTime),
-      ingredientAmount: Number(req.body.ingredientAmount),
-      cals: req.body.cals ? Number(req.body.cals) : undefined,
+    ...req.body,
+    owner: ownerId,
+    recipeImg: photoUrl,
+    cookiesTime: Number(req.body.cookiesTime),
+    ingredientAmount: Number(req.body.ingredientAmount),
+    cals: req.body.cals ? Number(req.body.cals) : undefined,
     };
 
     const newRecipe = await Recipe.create(newRecipeData);
