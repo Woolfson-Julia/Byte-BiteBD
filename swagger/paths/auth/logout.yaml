@@ -1,6 +1,6 @@
 tags:
   - Auth
-summary: logout user
+summary: Logout user
 operationId: logoutUser
 description: Logs out the authenticated user by deleting the session.
 security:

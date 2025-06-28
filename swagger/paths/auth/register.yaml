@@ -5,6 +5,7 @@ operationId: createUser
 description: Registers a new user account and returns access token with user data
 security: []
 requestBody:
+  required: true
   content:
     application/json:
       schema:

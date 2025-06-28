@@ -5,6 +5,7 @@ operationId: loginUser
 description: Authenticate an existing user and return access token with user data
 security: []
 requestBody:
+  required: true
   content:
     application/json:
       schema:
