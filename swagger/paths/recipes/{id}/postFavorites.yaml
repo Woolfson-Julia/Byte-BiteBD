@@ -1,8 +1,8 @@
 tags:
   - Recipes
-summary: Get filtered and paginated list of recipes
-operationId: getRecipes
-description: 'Get a list of recipes with filtering and pagination support'
+summary: Add a recipe to favorites and get paginated favorite recipes
+operationId: addToFavorites
+description: 'Add a recipe to the authenticated user favorites list and return paginated favorites'
 security:
   - bearerAuth: []
 parameters:
@@ -10,29 +10,33 @@ parameters:
     name: page
     schema:
       type: integer
-      example: 1
+      minimum: 1
+      default: 1
     description: Page number for pagination
   - in: query
-    name: perPage
+    name: limit
     schema:
       type: integer
-      example: 10
-    description: Number of items per page
-  - in: query
-    name: category
-    schema:
-      type: string
-      example: 'dessert'
-    description: Filter by category (припустимо, що такий фільтр є)
-  - in: query
-    name: ingredient
-    schema:
-      type: string
-      example: 'chocolate'
-    description: Filter by ingredient (припустимо, що такий фільтр є)
+      minimum: 1
+      maximum: 50
+      default: 12
+    description: Number of favorite recipes per page
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - recipeId
+        properties:
+          recipeId:
+            type: string
+            example: "65d7e8a4b9c3d12a5d8e9b74"
+            description: ID of the recipe to add to favorites
 responses:
   '200':
-    description: 'Successfully retrieved filtered list of recipes'
+    description: Recipe added to favorites or already in favorites
     content:
       application/json:
         schema:
@@ -47,11 +51,11 @@ responses:
               example: 200
             message:
               type: string
-              example: Successfully found recipes!
+              example: Recipe added to favorites
             data:
               type: object
               required:
-                - data
+                - favorites
                 - page
                 - perPage
                 - totalItems
@@ -59,7 +63,7 @@ responses:
                 - hasPreviousPage
                 - hasNextPage
               properties:
-                data:
+                favorites:
                   type: array
                   items:
                     $ref: '../../../components/schemas/recipe.yaml'
@@ -68,20 +72,24 @@ responses:
                   example: 1
                 perPage:
                   type: integer
-                  example: 10
+                  example: 12
                 totalItems:
                   type: integer
-                  example: 45
+                  example: 34
                 totalPages:
                   type: integer
-                  example: 5
+                  example: 3
                 hasPreviousPage:
                   type: boolean
                   example: false
                 hasNextPage:
                   type: boolean
                   example: true
+  '400':
+    $ref: '../../../components/responses/400.yaml'
   '401':
     $ref: '../../../components/responses/401.yaml'
   '404':
     $ref: '../../../components/responses/404.yaml'
+  '500':
+    $ref: '../../../components/responses/500.yaml'

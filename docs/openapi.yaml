@@ -25,6 +25,35 @@ paths:
   /ingredients:
     get:
       $ref: '../swagger/paths/ingredients/get.yaml'
+
+
+  /recipes:
+    get:
+      $ref: '../swagger/paths/recipes/get.yaml'
+
+  /recipes/{id}:
+    get:
+      $ref: '../swagger/paths/recipes/getById.yaml'
+
+  /recipes/add-recipe:
+    post:
+      $ref: '../swagger/paths/recipes/postAddRecipe.yaml'
+
+  /recipes/profile/own:
+    get:
+      $ref: '../swagger/paths/recipes/getOwn.yaml'
+
+  /recipes/profile/favorites:
+    get:
+      $ref: '../swagger/paths/recipes/favorites/getFavorites.yaml'
+    post:
+      $ref: '../swagger/paths/recipes/favorites/postFavorites.yaml'
+
+  /recipes/profile/favorites/{recipeId}:
+    delete:
+      $ref: '../swagger/paths/recipes/favorites/deleteFavorites.yaml'
+
+
 components:
   securitySchemes:
     bearerAuth:

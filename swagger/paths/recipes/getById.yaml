@@ -1,0 +1,90 @@
+tags:
+  - Recipes
+summary: Get recipe by id
+operationId: getRecipeById
+description: Get detailed information about a recipe by its ID
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+      example: "65d7e8a4b9c3d12a5d8e9b74"
+responses:
+  '200':
+    description: Successfully found recipe by id
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - _id
+            - name
+            - decr
+            - cookiesTime
+            - category
+            - ingredients
+            - ingredientAmount
+            - instruction
+            - owner
+          properties:
+            _id:
+              type: string
+              example: "65d7e8a4b9c3d12a5d8e9b74"
+            name:
+              type: string
+              maxLength: 64
+              example: "Chocolate Cake"
+            decr:
+              type: string
+              maxLength: 200
+              example: "Rich and moist cake perfect for celebrations."
+            cookiesTime:
+              type: integer
+              minimum: 1
+              maximum: 360
+              example: 45
+            cals:
+              type: integer
+              minimum: 1
+              maximum: 10000
+              nullable: true
+              example: 320
+            category:
+              type: string
+              example: "dessert"
+            ingredients:
+              type: array
+              items:
+                $ref: '../../../components/schemas/ingredient.yaml'
+            ingredientAmount:
+              type: integer
+              minimum: 2
+              maximum: 16
+              example: 5
+            instruction:
+              type: string
+              maxLength: 1200
+              example: "Mix all ingredients and bake at 180°C for 35 minutes."
+            recipeImg:
+              type: string
+              format: uri
+              nullable: true
+              example: "https://example.com/images/recipe.jpg"
+            owner:
+              type: string
+              example: "65d123abc9876543210fedcb"
+            createdAt:
+              type: string
+              format: date-time
+              example: "2024-12-01T14:23:00Z"
+            updatedAt:
+              type: string
+              format: date-time
+              example: "2024-12-05T11:00:00Z"
+  '404':
+    $ref: '../../../components/responses/404.yaml'
+  '401':
+    $ref: '../../../components/responses/401.yaml'
