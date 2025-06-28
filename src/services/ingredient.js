@@ -1,10 +1,10 @@
 import createHttpError from 'http-errors';
 
-import { IngredientsCollection } from '../models/ingredientSchema.js';
+import { Ingredient } from '../models/ingredientSchema.js';
 
 export const getAllIngredients = async () => {
   try {
-    const ingredients = await IngredientsCollection.find();
+    const ingredients = await Ingredient.find();
     console.log(ingredients);
     return ingredients;
   } catch (error) {
