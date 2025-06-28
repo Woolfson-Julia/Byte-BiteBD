@@ -1,0 +1,20 @@
+Category:
+  type: object
+  required:
+    - _id
+    - name
+  properties:
+    _id:
+      type: string
+      example: '665d14a36a70b4794fbcab12'
+    name:
+      type: string
+      example: 'breakfast'
+    createdAt:
+      type: string
+      format: date-time
+      example: '2024-06-01T12:00:00.000Z'
+    updatedAt:
+      type: string
+      format: date-time
+      example: '2024-06-01T12:30:00.000Z'

@@ -1,0 +1,50 @@
+operationId: getCategories
+summary: Retrieve recipe category list
+tags:
+  - Categories
+description: Returns an array of recipe categories. If no categories are found, a 404 error is returned.
+security: []
+responses:
+  '200':
+    description: Successfully retrieved the list of categories
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully found categories!
+            data:
+              type: array
+              items:
+                $ref: '../../components/schemas/category.yaml#/Category'
+  '404':
+    description: No categories found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: No categories found
+  '500':
+    description: Internal server error
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 500
+            message:
+              type: string
+              example: 'Internal server error: Database connection failed'
