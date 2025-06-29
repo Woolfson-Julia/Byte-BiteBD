@@ -14,7 +14,7 @@ import { upload } from '../middlewares/multer.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { createRecipeSchema } from '../validation/recipe.js';
 import { parseIngredientsMiddleware} from '../middlewares/parseIngredients.js';
-
+import { optionalAuthenticate } from '../middlewares/optionalAuthenticate.js';
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -22,7 +22,7 @@ const jsonParser = express.json();
 //GET
 router.get('/', ctrlWrapper(getRecipes));
 //GET/id
-router.get('/:id', ctrlWrapper(getRecipeById));
+router.get('/:id', optionalAuthenticate, ctrlWrapper(getRecipeById));
 
 // POST з тілом
 router.post('/add-recipe', authenticate, upload.single('recipeImg'),

@@ -1,23 +1,28 @@
 tags:
   - Recipes
-summary: "Get by id"
+summary: "Get a single recipe by its ID"
 operationId: getRecipeById
-description: 'Get by id'
+description: |
+  Retrieve detailed information about a specific recipe using its unique ID.
+  Optionally supports authentication — if a valid access token is provided, the response will include a `isFavorite` field indicating whether the recipe is in the user's favorites list.
+
+Example request: |
+  `GET http://localhost:3000/api/recipes/6462a8f74c3d0ddd28898016`
 security: []
 
 parameters:
   - in: path
-    name: recipeId
+    name: id
     required: true
     schema:
       type: string
       example: "65d7e8a4b9c3d12a5d8e9b74"
-    description: ID of the recipe to remove from favorites
+    description: Pass only the recipe ID
 
 
 responses:
   '200':
-    description: 'Successfully getRecipeById'
+    description: 'Recipe found successfully'
     content:
       application/json:
         schema:
@@ -26,39 +31,53 @@ responses:
             - status
             - message
             - data
+            - isFavorite
           properties:
             status:
               type: integer
               example: 200
             message:
               type: string
-              example: Successfully found recipe!
+              example: 'Recipe found successfully'
             data:
-              type: object
-              properties:
-                data:
-                  type: array
-                  items:
-                    $ref: '../../../components/schemas/recipe.yaml#/Recipe'
-                page:
-                  type: integer
-                  example: 1
-                perPage:
-                  type: integer
-                  example: 10
-                totalItems:
-                  type: integer
-                  example: 45
-                totalPages:
-                  type: integer
-                  example: 5
-                hasPreviousPage:
-                  type: boolean
-                  example: false
-                hasNextPage:
-                  type: boolean
-                  example: true
-  '401':
-    $ref: '../../../components/responses/401.yaml'
+              $ref: '../../../components/schemas/recipe.yaml#/Recipe'
+            isFavorite:
+              type: boolean
+              example: true
+
+
+  '400':
+    description: 'Invalid recipe ID format'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: 'Invalid recipe ID format'
+
   '404':
-    $ref: '../../../components/responses/404.yaml'
+    description: 'Recipe not found'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: 'Recipe not found'
+  '500':
+    $ref: '../../../components/responses/500.yaml'

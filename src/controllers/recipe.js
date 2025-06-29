@@ -5,6 +5,9 @@ import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseRecipeFilterParams } from '../utils/parseRecipeFilterParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { getPhotoUrl } from '../utils/getPhotoUrl.js';
+import { isRecipeFavorite } from '../utils/isRecipeFavorite.js';
+import mongoose from 'mongoose';
+
 
 import { Ingredient } from '../models/IngredientSchema.js';
 import { Category } from '../models/categorySchema.js';
@@ -42,17 +45,35 @@ console.log(filter);
     });
 };
 
-
 // /api/recipes/:id пошук для отримання детальної інформації про рецепт за його id
 // http://localhost:3000/api/recipes?ingredient=640c2dd963a319ea671e36f9
 export const getRecipeById = async (req, res, next) => {
 
   const { id } = req.params;
+if (!mongoose.Types.ObjectId.isValid(id)) {
+  return next(createHttpError(400, 'Invalid recipe ID format'));
+}
+
   const recipe = await Recipe.findById(id);
   if (!recipe) {
     return next(createHttpError(404, 'Recipe not found'));
   }
-  res.status(200).json(recipe);
+
+// перевірка, чи є цей рецепт у фейворітс
+let isFavorite = false;
+if (req.user) {
+  try {
+    isFavorite = await isRecipeFavorite(req.user._id, id);
+  } catch (err) {
+    return next(createHttpError(500, 'Internal Server Error'));
+  }
+}
+
+  res.status(200).json({
+    status: 200,
+    message: 'Recipe found successfully',
+    data: { ...recipe.toObject(), isFavorite }
+  });
 };
 
 // /add-recipe приватний ендпоінт для створення власного рецепту
@@ -105,7 +126,8 @@ export const createRecipe = async (req, res, next) => {
     });
 };
 
-// /profile/own пошук моїх рецептів
+// /profile/own пошук рецептів , які я постила
+
 // http://localhost:3000/api/recipes/profile/own?page=2&limit=5
 export const getMyRecipes = async (req, res, next) => {
   const ownerId = req.user._id;
@@ -128,11 +150,21 @@ export const getMyRecipes = async (req, res, next) => {
       .skip(skip)
       .limit(perPage);
 
+  // Для кожного рецепту викликаємо isRecipeFavorite
+    // Щоб зробити це ефективніше, можна виконати паралельно через Promise.all
+
+    const recipesWithFavorite = await Promise.all(
+      recipes.map(async (recipe) => {
+        const isFavorite = await isRecipeFavorite(ownerId, recipe._id);
+        return { ...recipe.toObject(), isFavorite };
+      })
+    );
+
     res.status(200).json({
       status: 200,
       message: 'Successfully found recipes!',
       data: {
-        recipes,
+        recipes: recipesWithFavorite,
         page,
         perPage,
         totalItems,
