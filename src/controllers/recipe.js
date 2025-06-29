@@ -6,47 +6,41 @@ import { parseRecipeFilterParams } from '../utils/parseRecipeFilterParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { getPhotoUrl } from '../utils/getPhotoUrl.js';
 
-import { Ingredient } from '../models/IngredientSchema.js';
-import { Category } from '../models/categorySchema.js';
-
+// import { Ingredient } from '../models/ingredientSchema.js';
+// import { Category } from '../models/categorySchema.js';
 
 // /api/recipes пошук рецептів за іменем/інгрідієнтами чи категоріями
 // http://localhost:3000/api/recipes?ingredient=640c2dd963a319ea671e36f9
 export const getRecipes = async (req, res) => {
-    const { page, perPage, skip } = parsePaginationParams(req.query);
-    const filter = parseRecipeFilterParams(req.query);
-console.log(filter);
-    const recipes = await Recipe
-        .find(filter)
-        .skip(skip)
-        .limit(perPage);
+  const { page, perPage, skip } = parsePaginationParams(req.query);
+  const filter = parseRecipeFilterParams(req.query);
+  console.log(filter);
+  const recipes = await Recipe.find(filter).skip(skip).limit(perPage);
 
-    const total = await Recipe.countDocuments(filter);
+  const total = await Recipe.countDocuments(filter);
 
-    if (!recipes || recipes.length === 0) {
-        throw createHttpError(404, 'There are no recipes matching your search!');
-    }
+  if (!recipes || recipes.length === 0) {
+    throw createHttpError(404, 'There are no recipes matching your search!');
+  }
 
-    res.json({
-        status: 200,
-        message: 'Successfully found recipes!',
-        data: {
-            data: recipes,
-            page,
-            perPage,
-            totalItems: total,
-            totalPages: Math.ceil(total / perPage),
-            hasPreviousPage: page > 1,
-            hasNextPage: page < Math.ceil(total / perPage),
-        }
-    });
+  res.json({
+    status: 200,
+    message: 'Successfully found recipes!',
+    data: {
+      data: recipes,
+      page,
+      perPage,
+      totalItems: total,
+      totalPages: Math.ceil(total / perPage),
+      hasPreviousPage: page > 1,
+      hasNextPage: page < Math.ceil(total / perPage),
+    },
+  });
 };
-
 
 // /api/recipes/:id пошук для отримання детальної інформації про рецепт за його id
 // http://localhost:3000/api/recipes?ingredient=640c2dd963a319ea671e36f9
 export const getRecipeById = async (req, res, next) => {
-
   const { id } = req.params;
   const recipe = await Recipe.findById(id);
   if (!recipe) {
@@ -87,22 +81,22 @@ export const createRecipe = async (req, res, next) => {
   const ownerId = req.user._id;
   const photoUrl = req.file ? await getPhotoUrl(req.file) : null;
 
-    const newRecipeData = {
+  const newRecipeData = {
     ...req.body,
     owner: ownerId,
     recipeImg: photoUrl,
     cookiesTime: Number(req.body.cookiesTime),
     ingredientAmount: Number(req.body.ingredientAmount),
     cals: req.body.cals ? Number(req.body.cals) : undefined,
-    };
+  };
 
-    const newRecipe = await Recipe.create(newRecipeData);
+  const newRecipe = await Recipe.create(newRecipeData);
 
-    res.status(201).json({
-      status: 201,
-      message: 'Successfully created a new recipe!',
-      data: newRecipe,
-    });
+  res.status(201).json({
+    status: 201,
+    message: 'Successfully created a new recipe!',
+    data: newRecipe,
+  });
 };
 
 // /profile/own пошук моїх рецептів
@@ -116,41 +110,40 @@ export const getMyRecipes = async (req, res, next) => {
 
   filter.owner = ownerId;
 
-    const totalItems = await Recipe.countDocuments(filter);
-    if (totalItems === 0) {
-      throw createHttpError(404, 'There are no recipes yet!');
-    }
+  const totalItems = await Recipe.countDocuments(filter);
+  if (totalItems === 0) {
+    throw createHttpError(404, 'There are no recipes yet!');
+  }
 
-    const totalPages = Math.ceil(totalItems / perPage);
+  const totalPages = Math.ceil(totalItems / perPage);
 
-    const recipes = await Recipe.find(filter)
-      .sort({ [sortBy]: sortOrder === 'asc' ? 1 : -1 })
-      .skip(skip)
-      .limit(perPage);
+  const recipes = await Recipe.find(filter)
+    .sort({ [sortBy]: sortOrder === 'asc' ? 1 : -1 })
+    .skip(skip)
+    .limit(perPage);
 
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully found recipes!',
-      data: {
-        recipes,
-        page,
-        perPage,
-        totalItems,
-        totalPages,
-        hasPreviousPage: page > 1,
-        hasNextPage: page < totalPages,
-      },
-    });
-  };
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully found recipes!',
+    data: {
+      recipes,
+      page,
+      perPage,
+      totalItems,
+      totalPages,
+      hasPreviousPage: page > 1,
+      hasNextPage: page < totalPages,
+    },
+  });
+};
 
 // /profile/favorites створити приватний ендпоінт для додавання рецепту до списку улюблених
 // http://localhost:3000/api/recipes/profile/favorites
 
 export const addToFavorites = async (req, res, next) => {
-
   const userId = req.user._id;
   const { recipeId } = req.body;
- if (!recipeId) {
+  if (!recipeId) {
     throw createHttpError(400, 'Recipe ID is required');
   }
 
@@ -167,7 +160,7 @@ export const addToFavorites = async (req, res, next) => {
 
   // Перевірка, чи рецепт уже у фаворитах
   const alreadyInFavorites = user.favorites.some(
-    (id) => id.toString() === recipeId
+    (id) => id.toString() === recipeId,
   );
 
   if (!alreadyInFavorites) {
@@ -175,12 +168,12 @@ export const addToFavorites = async (req, res, next) => {
     await user.save();
   }
 
-    // Пагінація
+  // Пагінація
   const page = parseInt(req.query.page) || 1;
   const perPage = parseInt(req.query.limit) || 12;
   const skip = (page - 1) * perPage;
 
-    // Наповнюємо фаворити з пагінацією
+  // Наповнюємо фаворити з пагінацією
   const populatedUser = await UsersCollection.findById(userId).populate({
     path: 'favorites',
     options: { skip, limit: perPage, sort: { createdAt: -1 } },
@@ -204,11 +197,10 @@ export const addToFavorites = async (req, res, next) => {
       hasNextPage: page < totalPages,
     },
   });
-  };
+};
 
 //  /favorites/:recipeId' створити приватний ендпоінт для видалення рецепту зі списку улюблених
 export const removeFavorite = async (req, res, next) => {
-
   const userId = req.user._id;
   const recipeId = req.params.recipeId;
 
@@ -222,7 +214,7 @@ export const removeFavorite = async (req, res, next) => {
   }
 
   const isInFavorites = user.favorites.some(
-    (favId) => favId.toString() === recipeId
+    (favId) => favId.toString() === recipeId,
   );
 
   if (!isInFavorites) {
@@ -230,7 +222,7 @@ export const removeFavorite = async (req, res, next) => {
   }
 
   user.favorites = user.favorites.filter(
-    (favId) => favId.toString() !== recipeId
+    (favId) => favId.toString() !== recipeId,
   );
 
   await user.save();
@@ -248,12 +240,11 @@ export const removeFavorite = async (req, res, next) => {
 // http://localhost:3000/api/recipes/profile/favorites?page=1
 
 export const getFavorites = async (req, res, next) => {
+  const userId = req.user._id;
+  const { page, perPage, skip } = parsePaginationParams(req.query);
+  const filter = parseRecipeFilterParams(req.query);
 
-const userId = req.user._id;
-const { page, perPage, skip } = parsePaginationParams(req.query);
-const filter = parseRecipeFilterParams(req.query);
-
-const user = await UsersCollection.findById(userId);
+  const user = await UsersCollection.findById(userId);
 
   if (!user) {
     throw createHttpError(404, 'User not found');
@@ -262,9 +253,12 @@ const user = await UsersCollection.findById(userId);
   // Фільтруємо тільки рецепти, які є у favorites користувача
   filter._id = { $in: user.favorites };
 
-const totalItems = await Recipe.countDocuments(filter);
+  const totalItems = await Recipe.countDocuments(filter);
   if (totalItems === 0) {
-    throw createHttpError(404, 'No favorite recipes found matching your criteria');
+    throw createHttpError(
+      404,
+      'No favorite recipes found matching your criteria',
+    );
   }
 
   const totalPages = Math.ceil(totalItems / perPage);
@@ -287,5 +281,4 @@ const totalItems = await Recipe.countDocuments(filter);
       hasNextPage: page < totalPages,
     },
   });
-
 };
