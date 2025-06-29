@@ -1,23 +1,26 @@
-import { model, Schema } from 'mongoose';
+import { Schema, mongoose } from 'mongoose';
 
-const ingredientSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    desc: {
-      type: String,
-      required: true,
-    },
-    img: {
-      type: String,
-      required: true,
-    },
+const IngredientSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+    maxlength: 64,
+    trim: true,
   },
-  {
-    timestamps: true,
+  desc: {
+    type: String,
+    required: false,
+    trim: true,
   },
-);
+  img: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+}, {
+  timestamps: true,
+});
 
-export const IngredientsCollection = model('ingredients', ingredientSchema);
+export const Ingredient = mongoose.model('Ingredient', IngredientSchema);
+
+

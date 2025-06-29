@@ -1,9 +1,10 @@
 tags:
   - Recipes
-summary: Get filtered and paginated list of recipes
-operationId: getRecipes
-description: 'Get a list of recipes with filtering and pagination support'
-security: []
+summary: Get favorite recipes of the authenticated user
+operationId: getFavorites
+description: 'Retrieve paginated list of favorite recipes for the authenticated user'
+security:
+  - bearerAuth: []
 parameters:
   - in: query
     name: page
@@ -37,9 +38,10 @@ parameters:
     description: Filter by name
 
 
+
 responses:
   '200':
-    description: 'Successfully retrieved filtered list of recipes'
+    description: Successfully retrieved favorite recipes
     content:
       application/json:
         schema:
@@ -54,11 +56,11 @@ responses:
               example: 200
             message:
               type: string
-              example: Successfully found recipes!
+              example: Successfully retrieved favorite recipes
             data:
               type: object
               required:
-                - data
+                - favorites
                 - page
                 - perPage
                 - totalItems
@@ -66,22 +68,22 @@ responses:
                 - hasPreviousPage
                 - hasNextPage
               properties:
-                data:
+                favorites:
                   type: array
                   items:
-                    $ref: '../../components/schemas/recipe.yaml#/Recipe'
+                    $ref: '../../../../components/schemas/recipe.yaml#/Recipe'
                 page:
                   type: integer
                   example: 1
                 perPage:
                   type: integer
-                  example: 10
+                  example: 12
                 totalItems:
                   type: integer
-                  example: 45
+                  example: 34
                 totalPages:
                   type: integer
-                  example: 5
+                  example: 3
                 hasPreviousPage:
                   type: boolean
                   example: false
@@ -89,6 +91,8 @@ responses:
                   type: boolean
                   example: true
   '401':
-    $ref: '../../components/responses/401.yaml'
+    $ref: '../../../../components/responses/401.yaml'
   '404':
-    $ref: '../../components/responses/404.yaml'
+    $ref: '../../../../components/responses/404.yaml'
+  '500':
+    $ref: '../../../../components/responses/500.yaml'

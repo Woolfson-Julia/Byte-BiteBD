@@ -24,13 +24,7 @@ servers:
   - url: https://byte-bitebd.onrender.com/api
     description: Production server
 paths:
-  /categories:
-    get:
-      $ref: '../swagger/paths/categories/get.yaml'
-  /ingredients:
-    get:
-      $ref: '../swagger/paths/ingredients/get.yaml'
-  /auth/register:
+   /auth/register:
     post:
       $ref: ../swagger/paths/auth/register.yaml
   /auth/login:
@@ -45,6 +39,32 @@ paths:
   /users/current:
     get:
       $ref: ../swagger/paths/users/get.yaml
+  /recipes:
+    get:
+      $ref: '../swagger/paths/recipes/get.yaml'
+  /categories:
+    get:
+      $ref: '../swagger/paths/categories/get.yaml'
+  /ingredients:
+    get:
+      $ref: '../swagger/paths/ingredients/get.yaml'     
+  /recipes/{id}:
+    get:
+      $ref: '../swagger/paths/recipes/{id}/get.yaml'     
+  /recipes/add-recipe:
+    post:
+      $ref: '../swagger/paths/recipes/add-recipe/post.yaml'
+  /recipes/profile/own:
+    get:
+      $ref: '../swagger/paths/recipes/profile/own/get.yaml'
+  /recipes/profile/favorites:
+    get:
+      $ref: '../swagger/paths/recipes/profile/favorites/get.yaml'
+    post:
+      $ref: '../swagger/paths/recipes/profile/favorites/post.yaml'
+  /recipes/profile/favorites/{recipeId}:
+    delete:
+      $ref: '../swagger/paths/recipes/profile/favorites/{id}/delete.yaml'
 components:
   securitySchemes:
     bearerAuth:

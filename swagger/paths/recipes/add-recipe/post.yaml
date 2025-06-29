@@ -1,0 +1,94 @@
+tags:
+  - Recipes
+summary: Create a new recipe
+operationId: createRecipe
+description: 'Create a new recipe with optional photo upload'
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        required:
+          - name
+          - decr
+          - cookiesTime
+          - category
+          - ingredients
+          - instruction
+        properties:
+          name:
+            type: string
+            maxLength: 64
+            example: "Chocolate Cake"
+          decr:
+            type: string
+            maxLength: 200
+            example: "Rich and moist cake perfect for celebrations."
+          cookiesTime:
+            type: integer
+            minimum: 1
+            maximum: 360
+            example: 45
+          cals:
+            type: integer
+            minimum: 1
+            maximum: 10000
+            nullable: true
+            example: 320
+          category:
+            type: string
+            example: "dessert"
+          ingredients:
+            type: array
+            items:
+              type: object
+              required:
+                - id
+                - measure
+              properties:
+                id:
+                  type: string
+                  example: "640c2dd963a319ea671e36f9"
+                measure:
+                  type: string
+                  example: "200g"
+            minItems: 2
+            maxItems: 16
+          instruction:
+            type: string
+            maxLength: 1200
+            example: "Mix all ingredients and bake at 180°C for 35 minutes."
+          recipeImg:
+            type: string
+            format: binary
+            description: "Image file of the recipe"
+responses:
+  '201':
+    description: Successfully created a new recipe
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Successfully created a new recipe!
+            data:
+              type: object
+              $ref: '../../../components/schemas/recipe.yaml#/Recipe'
+  '400':
+    $ref: '../../../components/responses/400.yaml'
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+  '500':
+    $ref: '../../../components/responses/500.yaml'

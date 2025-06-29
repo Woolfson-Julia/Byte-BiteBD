@@ -1,10 +1,25 @@
 tags:
   - Recipes
-summary: Get filtered and paginated list of recipes
-operationId: getRecipes
-description: 'Get a list of recipes with filtering and pagination support'
-security: []
+summary: Get my own recipes with pagination and sorting
+operationId: getMyRecipes
+description: 'Get paginated list of recipes created by the authenticated user'
+security:
+  - bearerAuth: []
 parameters:
+
+  - in: query
+    name: sortBy
+    schema:
+      type: string
+      default: createdAt
+    description: Field to sort by
+  - in: query
+    name: sortOrder
+    schema:
+      type: string
+      enum: [asc, desc]
+      default: desc
+    description: Sort order:ascending or descending
   - in: query
     name: page
     schema:
@@ -39,7 +54,7 @@ parameters:
 
 responses:
   '200':
-    description: 'Successfully retrieved filtered list of recipes'
+    description: Successfully found recipes
     content:
       application/json:
         schema:
@@ -58,7 +73,7 @@ responses:
             data:
               type: object
               required:
-                - data
+                - recipes
                 - page
                 - perPage
                 - totalItems
@@ -66,29 +81,31 @@ responses:
                 - hasPreviousPage
                 - hasNextPage
               properties:
-                data:
+                recipes:
                   type: array
                   items:
-                    $ref: '../../components/schemas/recipe.yaml#/Recipe'
+                    $ref: '../../../../components/schemas/recipe.yaml#/Recipe'
                 page:
                   type: integer
-                  example: 1
+                  example: 2
                 perPage:
                   type: integer
-                  example: 10
+                  example: 5
                 totalItems:
                   type: integer
-                  example: 45
+                  example: 42
                 totalPages:
                   type: integer
-                  example: 5
+                  example: 9
                 hasPreviousPage:
                   type: boolean
-                  example: false
+                  example: true
                 hasNextPage:
                   type: boolean
                   example: true
   '401':
-    $ref: '../../components/responses/401.yaml'
+    $ref: '../../../../components/responses/401.yaml'
   '404':
-    $ref: '../../components/responses/404.yaml'
+    $ref: '../../../../components/responses/404.yaml'
+  '500':
+    $ref: '../../../../components/responses/500.yaml'
