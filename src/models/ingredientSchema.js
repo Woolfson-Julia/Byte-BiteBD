@@ -5,14 +5,18 @@ const ingredientSchema = new Schema(
     name: {
       type: String,
       required: true,
+      maxlength: 64,
+      trim: true,
     },
     desc: {
       type: String,
-      required: true,
+      required: false,
+      trim: true,
     },
     img: {
       type: String,
-      required: true,
+      required: false,
+      trim: true,
     },
   },
   {
