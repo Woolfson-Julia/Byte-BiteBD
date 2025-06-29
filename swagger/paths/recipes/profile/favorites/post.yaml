@@ -1,0 +1,95 @@
+tags:
+  - Recipes
+summary: Add a recipe to favorites and get paginated favorite recipes
+operationId: addToFavorites
+description: 'Add a recipe to the authenticated user favorites list and return paginated favorites'
+security:
+  - bearerAuth: []
+parameters:
+  - in: query
+    name: page
+    schema:
+      type: integer
+      minimum: 1
+      default: 1
+    description: Page number for pagination
+  - in: query
+    name: limit
+    schema:
+      type: integer
+      minimum: 1
+      maximum: 50
+      default: 12
+    description: Number of favorite recipes per page
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - recipeId
+        properties:
+          recipeId:
+            type: string
+            example: "65d7e8a4b9c3d12a5d8e9b74"
+            description: ID of the recipe to add to favorites
+responses:
+  '201':
+    description: Successfully created a new recipe!
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Successfully created a new recipe!
+            data:
+              type: object
+              required:
+                - favorites
+                - page
+                - perPage
+                - totalItems
+                - totalPages
+                - hasPreviousPage
+                - hasNextPage
+              properties:
+                favorites:
+                  type: array
+                  items:
+                    $ref: '../../../../components/schemas/recipe.yaml#/Recipe'
+                page:
+                  type: integer
+                  example: 1
+                perPage:
+                  type: integer
+                  example: 12
+                totalItems:
+                  type: integer
+                  example: 34
+                totalPages:
+                  type: integer
+                  example: 3
+                hasPreviousPage:
+                  type: boolean
+                  example: false
+                hasNextPage:
+                  type: boolean
+                  example: true
+  '400':
+    $ref: '../../../../components/responses/400.yaml'
+  '401':
+    $ref: '../../../../components/responses/401.yaml'
+  '404':
+    $ref: '../../../../components/responses/404.yaml'
+  '500':
+    $ref: '../../../../components/responses/500.yaml'
