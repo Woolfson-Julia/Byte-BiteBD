@@ -5,6 +5,10 @@ import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseRecipeFilterParams } from '../utils/parseRecipeFilterParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { getPhotoUrl } from '../utils/getPhotoUrl.js';
+import {
+  getEnrichedRecipes,
+  getEnrichedRecipe,
+} from '../services/ingredient.js';
 
 // import { Ingredient } from '../models/ingredientSchema.js';
 // import { Category } from '../models/categorySchema.js';
@@ -22,12 +26,15 @@ export const getRecipes = async (req, res) => {
   if (!recipes || recipes.length === 0) {
     throw createHttpError(404, 'There are no recipes matching your search!');
   }
-
+  // передаємо в getEnrichedRecipes масив рецептів для збагачення їх інгредієнтами
+  const enrichedRecipes = await getEnrichedRecipes(recipes);
+  //повертаємо збагачені рецепти
   res.json({
     status: 200,
     message: 'Successfully found recipes!',
     data: {
-      data: recipes,
+      // data: recipes,
+      data: enrichedRecipes,
       page,
       perPage,
       totalItems: total,
@@ -46,7 +53,11 @@ export const getRecipeById = async (req, res, next) => {
   if (!recipe) {
     return next(createHttpError(404, 'Recipe not found'));
   }
-  res.status(200).json(recipe);
+  // передаємо в getEnrichedRecipe 1 рецепт
+  const enrichedRecipe = await getEnrichedRecipe(recipe);
+  //повертає збагачений рецепт
+  // res.status(200).json(recipe);
+  res.status(200).json(enrichedRecipe);
 };
 
 // /add-recipe приватний ендпоінт для створення власного рецепту

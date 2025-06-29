@@ -1,67 +1,68 @@
 import { Schema, model } from 'mongoose';
 
-const recipeSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
-    maxlength: 64,
-    trim: true, //назва
-  },
-  decr: {
-    type: String,
-    required: true,
-    maxlength: 200,
-    trim: true, // короткий опис рецепту
-  },
-  cookiesTime: {
-    type: Number,
-    required: true,
-    min: 1,
-    max: 360, // час приготування в хвилинах
-  },
-  cals: {
-    type: Number,
-    required: false,
-    min: 1,
-    max: 10000, // кількість калорій
-  },
-  category: {
-    type: String,
-    ref: 'Category',
-    required: true,
-},
-ingredients: [
-    {
-      id: {
-        type: String,
-        ref: 'Ingredient',
-        required: true,
+const recipeSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      maxlength: 64,
+      trim: true, //назва
+    },
+    decr: {
+      type: String,
+      required: true,
+      maxlength: 200,
+      trim: true, // короткий опис рецепту
+    },
+    cookiesTime: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 360, // час приготування в хвилинах
+    },
+    cals: {
+      type: Number,
+      required: false,
+      min: 1,
+      max: 10000, // кількість калорій
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+    ingredients: [
+      {
+        id: {
+          type: String,
+          required: true,
+        },
+        measure: {
+          type: String,
+          required: true,
+        },
+        _id: false,
       },
+    ],
 
-      measure: {
-        type: String,
-        required: true,
-      }
-    }
-  ],
-
-  instruction: {
-    type: String,
-    required: true,
-    maxlength: 1200, // детальний опис приготування
+    instruction: {
+      type: String,
+      required: true,
+      maxlength: 1200, // детальний опис приготування
+    },
+    recipeImg: {
+      type: String,
+      required: false,
+      // фотка їдла
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true, // автор рецепту
+    },
   },
-  recipeImg: {
-    type: String,
-    required: false,
-    // фотка їдла
+  {
+    timestamps: true,
   },
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true, // автор рецепту
-  },
-}, {
-  timestamps: true,
-});
+);
 
 export const Recipe = model('Recipe', recipeSchema);

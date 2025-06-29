@@ -1,12 +1,21 @@
 import createHttpError from 'http-errors';
-
 import { Ingredient } from '../models/ingredientSchema.js';
 
 export const getAllIngredients = async () => {
   try {
     const ingredients = await Ingredient.find();
-    console.log(ingredients);
     return ingredients;
+  } catch (error) {
+    throw createHttpError(
+      500,
+      `Failed to fetch ingredients - ${error.message}`,
+    );
+  }
+};
+export const getIngredientById = async (id) => {
+  try {
+    const ingredient = await Ingredient.findById(id);
+    return ingredient;
   } catch (error) {
     throw createHttpError(
       500,
@@ -17,49 +26,52 @@ export const getAllIngredients = async () => {
 export const getIngredientsById = async (ids) => {
   try {
     const ingredients = await Ingredient.find({ _id: { $in: ids } });
-    if (!ingredients) {
-      throw createHttpError(404, 'Ingredients not found');
-    }
     return ingredients;
   } catch (error) {
-    throw createHttpError(500, `Failed to fetch ingredient - ${error.message}`);
+    throw createHttpError(
+      500,
+      `Failed to fetch ingredients - ${error.message}`,
+    );
   }
 };
 export const getEnrichedRecipes = async (recipes) => {
-  // 1. Зібрати всі унікальні id інгредієнтів
-  const allIngredientIds = new Set();
+  const allIngredientIds = new Set(); //lдозволяє уникнути дублікатів
   recipes.forEach((recipe) => {
     recipe.ingredients.forEach((ing) => {
       if (ing.id) {
-        allIngredientIds.add(ing.id.toString());
+        allIngredientIds.add(ing.id);
       }
     });
   });
 
-  // 2. Отримати повну інформацію про інгредієнти
-  const ingredientDocs = await getIngredientsById([...allIngredientIds]);
+  const ingIds = [...allIngredientIds];
 
-  // 3. Створити Map для швидкого доступу
+  const ingredientDocs = await getIngredientsById(ingIds);
+
   const ingredientMap = new Map();
   ingredientDocs.forEach((ing) => {
     ingredientMap.set(ing._id.toString(), ing);
   });
 
-  // 4. Замінити id на повні об'єкти
   const enrichedRecipes = recipes.map((recipe) => {
     const enrichedIngredients = recipe.ingredients.map(({ id, measure }) => {
-      const fullIngredient = ingredientMap.get(id);
+      const fullIngredient = ingredientMap.get(id.toString());
+
       return {
-        ingredient: fullIngredient || { _id: id, name: 'Not found' },
+        ingredient: fullIngredient || { _id: id, name: 'Not found any' },
         measure,
       };
     });
 
     return {
-      ...(recipe.toObject?.() ?? recipe),
+      ...(typeof recipe.toObject === 'function' ? recipe.toObject() : recipe),
       ingredients: enrichedIngredients,
     };
   });
 
   return enrichedRecipes;
+};
+export const getEnrichedRecipe = async (recipe) => {
+  const [enriched] = await getEnrichedRecipes([recipe]);
+  return enriched;
 };
