@@ -14,17 +14,19 @@ tags:
     description: Operations about categories.
   - name: Ingredients
     description: Operations about ingredients.
+  - name: Recipes
+    description: Operations about recipes.
   - name: Auth
     description: Auth operations.
   - name: Users
     description: Operations about users.
 servers:
-  - url: http://127.0.0.1:3000/api
-    description: Local server
   - url: https://byte-bitebd.onrender.com/api
     description: Production server
+  - url: http://127.0.0.1:3000/api
+    description: Local server
 paths:
-   /auth/register:
+  /auth/register:
     post:
       $ref: ../swagger/paths/auth/register.yaml
   /auth/login:
@@ -39,32 +41,32 @@ paths:
   /users/current:
     get:
       $ref: ../swagger/paths/users/get.yaml
-  /recipes:
-    get:
-      $ref: '../swagger/paths/recipes/get.yaml'
   /categories:
     get:
-      $ref: '../swagger/paths/categories/get.yaml'
+      $ref: ../swagger/paths/categories/get.yaml
   /ingredients:
     get:
-      $ref: '../swagger/paths/ingredients/get.yaml'     
+      $ref: ../swagger/paths/ingredients/get.yaml
+  /recipes:
+    get:
+      $ref: ../swagger/paths/recipes/get.yaml
   /recipes/{id}:
     get:
-      $ref: '../swagger/paths/recipes/{id}/get.yaml'     
+      $ref: ../swagger/paths/recipes/{id}/get.yaml
   /recipes/add-recipe:
     post:
-      $ref: '../swagger/paths/recipes/add-recipe/post.yaml'
+      $ref: ../swagger/paths/recipes/add-recipe/post.yaml
   /recipes/profile/own:
     get:
-      $ref: '../swagger/paths/recipes/profile/own/get.yaml'
+      $ref: ../swagger/paths/recipes/profile/own/get.yaml
   /recipes/profile/favorites:
     get:
-      $ref: '../swagger/paths/recipes/profile/favorites/get.yaml'
+      $ref: ../swagger/paths/recipes/profile/favorites/get.yaml
     post:
-      $ref: '../swagger/paths/recipes/profile/favorites/post.yaml'
+      $ref: ../swagger/paths/recipes/profile/favorites/post.yaml
   /recipes/profile/favorites/{recipeId}:
     delete:
-      $ref: '../swagger/paths/recipes/profile/favorites/{id}/delete.yaml'
+      $ref: ../swagger/paths/recipes/profile/favorites/{id}/delete.yaml
 components:
   securitySchemes:
     bearerAuth:

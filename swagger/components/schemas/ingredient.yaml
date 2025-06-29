@@ -1,4 +1,3 @@
-Ingredient:
   type: object
   required:
     - _id

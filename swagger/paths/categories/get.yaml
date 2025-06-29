@@ -21,7 +21,7 @@ responses:
             data:
               type: array
               items:
-                $ref: '../../components/schemas/category.yaml#/Category'
+                $ref: '../../components/schemas/category.yaml'
   '404':
     description: No categories found
     content:

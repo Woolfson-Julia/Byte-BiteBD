@@ -71,7 +71,7 @@ responses:
                 favorites:
                   type: array
                   items:
-                    $ref: '../../../../components/schemas/recipe.yaml#/Recipe'
+                    $ref: '../../../../components/schemas/recipe.yaml'
                 page:
                   type: integer
                   example: 1
