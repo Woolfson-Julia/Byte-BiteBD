@@ -1,8 +1,7 @@
 import { Schema, model } from 'mongoose';
-import {Ingredient} from "./ingredientSchema.js";
 
 const recipeSchema = new Schema({
-  name: {
+  title: {
     type: String,
     required: true,
     maxlength: 64,
@@ -27,19 +26,25 @@ const recipeSchema = new Schema({
     max: 10000, // кількість калорій
   },
   category: {
-    type: String,// Назва категорії
+    type: String,
+    ref: 'Category',
     required: true,
 },
-  ingredients: {
-    type: [Ingredient],
-    required: true, // масив айдішок та грамовки
-  },
-  ingredientAmount: {
-    type: Number,
-    required: true,
-    min: 2,
-    max: 16, // кількість інгредієнта
-  },
+ingredients: [
+    {
+      id: {
+        type: String,
+        ref: 'Ingredient',
+        required: true,
+      },
+
+      measure: {
+        type: String,
+        required: true,
+      }
+    }
+  ],
+
   instruction: {
     type: String,
     required: true,

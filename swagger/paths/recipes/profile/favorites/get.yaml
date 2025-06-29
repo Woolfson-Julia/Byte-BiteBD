@@ -10,17 +10,35 @@ parameters:
     name: page
     schema:
       type: integer
-      minimum: 1
-      default: 1
+      example: 1
     description: Page number for pagination
   - in: query
-    name: limit
+    name: perPage
     schema:
       type: integer
-      minimum: 1
-      default: 12
-    description: Number of recipes per page
-  # Додаткові параметри фільтрації можуть бути описані тут, якщо parseRecipeFilterParams підтримує їх
+      example: 10
+    description: Number of items per page
+  - in: query
+    name: category
+    schema:
+      type: string
+      example: 'dessert'
+    description: Filter by category
+  - in: query
+    name: ingredient
+    schema:
+      type: string
+      example: 'chocolate'
+    description: Filter by ingredient
+  - in: query
+    name: title
+    schema:
+      type: string
+      example: 'Japanese gohan rice'
+    description: Filter by name
+
+
+
 responses:
   '200':
     description: Successfully retrieved favorite recipes
@@ -53,7 +71,7 @@ responses:
                 favorites:
                   type: array
                   items:
-                    $ref: '../../../components/schemas/recipe.yaml'
+                    $ref: '../../../../components/schemas/recipe.yaml#/Recipe'
                 page:
                   type: integer
                   example: 1
@@ -73,8 +91,8 @@ responses:
                   type: boolean
                   example: true
   '401':
-    $ref: '../../../components/responses/401.yaml'
+    $ref: '../../../../components/responses/401.yaml'
   '404':
-    $ref: '../../../components/responses/404.yaml'
+    $ref: '../../../../components/responses/404.yaml'
   '500':
-    $ref: '../../../components/responses/500.yaml'
+    $ref: '../../../../components/responses/500.yaml'

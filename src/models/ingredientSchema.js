@@ -1,18 +1,26 @@
-import mongoose from 'mongoose';
+import { Schema, mongoose } from 'mongoose';
 
-const { Schema, model } = mongoose;
-
-export const Ingredient = new Schema({
-    id: {
-      type: String, // бо в тебе просто рядок ID
-      required: true,
-    },
-    measure: {
-      type: String,
-      required: true,
-    },
+const IngredientSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+    maxlength: 64,
+    trim: true,
   },
-  { _id: false } // Не створювати окремий _id для кожного елемента масиву
-);
+  desc: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+  img: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+}, {
+  timestamps: true,
+});
 
-export const IngredientsCollection = model('Ingredient', Ingredient);
+export const Ingredient = mongoose.model('Ingredient', IngredientSchema);
+
+

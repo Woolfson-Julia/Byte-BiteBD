@@ -35,8 +35,8 @@ requestBody:
             example: "65d7e8a4b9c3d12a5d8e9b74"
             description: ID of the recipe to add to favorites
 responses:
-  '200':
-    description: Recipe added to favorites or already in favorites
+  '201':
+    description: Successfully created a new recipe!
     content:
       application/json:
         schema:
@@ -48,10 +48,10 @@ responses:
           properties:
             status:
               type: integer
-              example: 200
+              example: 201
             message:
               type: string
-              example: Recipe added to favorites
+              example: Successfully created a new recipe!
             data:
               type: object
               required:
@@ -66,7 +66,7 @@ responses:
                 favorites:
                   type: array
                   items:
-                    $ref: '../../../components/schemas/recipe.yaml'
+                    $ref: '../../../../components/schemas/recipe.yaml#/Recipe'
                 page:
                   type: integer
                   example: 1
@@ -86,10 +86,10 @@ responses:
                   type: boolean
                   example: true
   '400':
-    $ref: '../../../components/responses/400.yaml'
+    $ref: '../../../../components/responses/400.yaml'
   '401':
-    $ref: '../../../components/responses/401.yaml'
+    $ref: '../../../../components/responses/401.yaml'
   '404':
-    $ref: '../../../components/responses/404.yaml'
+    $ref: '../../../../components/responses/404.yaml'
   '500':
-    $ref: '../../../components/responses/500.yaml'
+    $ref: '../../../../components/responses/500.yaml'

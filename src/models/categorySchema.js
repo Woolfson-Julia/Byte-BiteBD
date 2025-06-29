@@ -8,4 +8,4 @@ const categorySchema = new mongoose.Schema({
     maxlength: 64 }
 });
 
-export const CategoriesCollection = mongoose.model('Category', categorySchema);
+export const Category = mongoose.model('Category', categorySchema);

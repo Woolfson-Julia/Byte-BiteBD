@@ -43,10 +43,10 @@ responses:
                     example: "65d7e8a4b9c3d12a5d8e9b74"
                   description: List of recipe IDs still in favorites after removal
   '400':
-    $ref: '../../../components/responses/400.yaml'
+    $ref: '../../../../../components/responses/400.yaml'
   '401':
-    $ref: '../../../components/responses/401.yaml'
+    $ref: '../../../../../components/responses/401.yaml'
   '404':
-    $ref: '../../../components/responses/404.yaml'
+    $ref: '../../../../../components/responses/404.yaml'
   '500':
-    $ref: '../../../components/responses/500.yaml'
+    $ref: '../../../../../components/responses/500.yaml'

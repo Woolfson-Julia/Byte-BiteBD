@@ -1,4 +1,4 @@
-description: Not Found - resource does not exist or no results matched the search
+description: The requested contact or route was not found
 content:
   application/json:
     schema:
@@ -13,7 +13,7 @@ content:
           example: 404
         message:
           type: string
-          example: There are no recipes matching your search!
+          example: Contact not found
         data:
           type: object
           required:
@@ -21,4 +21,4 @@ content:
           properties:
             message:
               type: string
-              example: 'There are no recipes matching your search!'
+              example: 'Contact not found'

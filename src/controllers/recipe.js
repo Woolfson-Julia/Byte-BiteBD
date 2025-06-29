@@ -5,21 +5,25 @@ import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseRecipeFilterParams } from '../utils/parseRecipeFilterParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { getPhotoUrl } from '../utils/getPhotoUrl.js';
+
+import { Ingredient } from '../models/IngredientSchema.js';
+import { Category } from '../models/categorySchema.js';
+
+
 // /api/recipes пошук рецептів за іменем/інгрідієнтами чи категоріями
 // http://localhost:3000/api/recipes?ingredient=640c2dd963a319ea671e36f9
-
 export const getRecipes = async (req, res) => {
     const { page, perPage, skip } = parsePaginationParams(req.query);
     const filter = parseRecipeFilterParams(req.query);
+console.log(filter);
+    const recipes = await Recipe
+        .find(filter)
+        .skip(skip)
+        .limit(perPage);
 
-    const recipes = await Recipe.find(filter).skip(skip).limit(perPage);
     const total = await Recipe.countDocuments(filter);
 
-    if (recipes === null) {
-        throw createHttpError(404, 'Recipes not found');
-    }
-
-    if (recipes.length === 0) {
+    if (!recipes || recipes.length === 0) {
         throw createHttpError(404, 'There are no recipes matching your search!');
     }
 
@@ -37,6 +41,8 @@ export const getRecipes = async (req, res) => {
         }
     });
 };
+
+
 // /api/recipes/:id пошук для отримання детальної інформації про рецепт за його id
 // http://localhost:3000/api/recipes?ingredient=640c2dd963a319ea671e36f9
 export const getRecipeById = async (req, res, next) => {
@@ -136,7 +142,6 @@ export const getMyRecipes = async (req, res, next) => {
       },
     });
   };
-
 
 // /profile/favorites створити приватний ендпоінт для додавання рецепту до списку улюблених
 // http://localhost:3000/api/recipes/profile/favorites

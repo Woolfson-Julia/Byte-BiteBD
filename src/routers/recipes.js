@@ -25,7 +25,10 @@ router.get('/', ctrlWrapper(getRecipes));
 router.get('/:id', ctrlWrapper(getRecipeById));
 
 // POST з тілом
-router.post('/add-recipe', authenticate, upload.single('recipeImg'), parseIngredientsMiddleware, validateBody(createRecipeSchema), ctrlWrapper(createRecipe));
+router.post('/add-recipe', authenticate, upload.single('recipeImg'),
+parseIngredientsMiddleware,
+validateBody(createRecipeSchema),
+ctrlWrapper(createRecipe));
 
 //GET my
 router.get('/profile/own', authenticate, ctrlWrapper(getMyRecipes));

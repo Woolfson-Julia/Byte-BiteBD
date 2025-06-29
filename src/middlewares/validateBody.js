@@ -2,7 +2,7 @@ import createHttpError from 'http-errors';
 
 export const validateBody = (schema) => async (req, res, next) => {
   try {
-
+console.log('до валідатор', req.body.ingredients);
     if (req.body.ingredients && typeof req.body.ingredients === 'string') {
       req.body.ingredients = JSON.parse(req.body.ingredients);
     }

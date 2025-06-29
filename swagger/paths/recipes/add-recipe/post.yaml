@@ -17,7 +17,6 @@ requestBody:
           - cookiesTime
           - category
           - ingredients
-          - ingredientAmount
           - instruction
         properties:
           name:
@@ -58,11 +57,6 @@ requestBody:
                   example: "200g"
             minItems: 2
             maxItems: 16
-          ingredientAmount:
-            type: integer
-            minimum: 2
-            maximum: 16
-            example: 5
           instruction:
             type: string
             maxLength: 1200
@@ -91,7 +85,7 @@ responses:
               example: Successfully created a new recipe!
             data:
               type: object
-              $ref: '../../../components/schemas/recipe.yaml'
+              $ref: '../../../components/schemas/recipe.yaml#/Recipe'
   '400':
     $ref: '../../../components/responses/400.yaml'
   '401':

@@ -1,49 +1,23 @@
 tags:
   - Recipes
-summary: Get my own recipes with pagination and sorting
-operationId: getMyRecipes
-description: 'Get paginated list of recipes created by the authenticated user'
-security:
-  - bearerAuth: []
+summary: "Get by id"
+operationId: getRecipeById
+description: 'Get by id'
+security: []
+
 parameters:
-  - in: query
-    name: page
-    schema:
-      type: integer
-      minimum: 1
-      default: 1
-    description: Page number for pagination
-  - in: query
-    name: perPage
-    schema:
-      type: integer
-      minimum: 1
-      maximum: 50
-      default: 10
-    description: Number of recipes per page
-  - in: query
-    name: sortBy
+  - in: path
+    name: recipeId
+    required: true
     schema:
       type: string
-      enum: [name, category, createdAt, updatedAt, cookiesTime]
-      default: createdAt
-    description: Field to sort by
-  - in: query
-    name: sortOrder
-    schema:
-      type: string
-      enum: [asc, desc]
-      default: desc
-    description: Sort order:ascending or descending
-  # Припустимо, що parseRecipeFilterParams може приймати фільтри, наприклад category:
-  - in: query
-    name: category
-    schema:
-      type: string
-    description: Filter recipes by category (optional)
+      example: "65d7e8a4b9c3d12a5d8e9b74"
+    description: ID of the recipe to remove from favorites
+
+
 responses:
   '200':
-    description: Successfully found recipes
+    description: 'Successfully getRecipeById'
     content:
       application/json:
         schema:
@@ -58,37 +32,29 @@ responses:
               example: 200
             message:
               type: string
-              example: Successfully found recipes!
+              example: Successfully found recipe!
             data:
               type: object
-              required:
-                - recipes
-                - page
-                - perPage
-                - totalItems
-                - totalPages
-                - hasPreviousPage
-                - hasNextPage
               properties:
-                recipes:
+                data:
                   type: array
                   items:
-                    $ref: '../../../components/schemas/recipe.yaml'
+                    $ref: '../../../components/schemas/recipe.yaml#/Recipe'
                 page:
                   type: integer
-                  example: 2
+                  example: 1
                 perPage:
                   type: integer
-                  example: 5
+                  example: 10
                 totalItems:
                   type: integer
-                  example: 42
+                  example: 45
                 totalPages:
                   type: integer
-                  example: 9
+                  example: 5
                 hasPreviousPage:
                   type: boolean
-                  example: true
+                  example: false
                 hasNextPage:
                   type: boolean
                   example: true
@@ -96,5 +62,3 @@ responses:
     $ref: '../../../components/responses/401.yaml'
   '404':
     $ref: '../../../components/responses/404.yaml'
-  '500':
-    $ref: '../../../components/responses/500.yaml'
