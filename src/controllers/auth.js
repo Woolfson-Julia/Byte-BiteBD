@@ -33,7 +33,7 @@ export const registerUserController = async (req, res) => {
 };
 
 export const loginUserController = async (req, res) => {
-  const session = await loginUser(req.body);
+  const { user, session } = await loginUser(req.body);
 
   setupSession(res, session);
 
@@ -41,15 +41,14 @@ export const loginUserController = async (req, res) => {
     status: 200,
     message: 'Successfully logged in a user!',
     data: {
+      user,
       accessToken: session.accessToken,
     },
   });
 };
 
 export const logoutUserController = async (req, res) => {
-  if (req.cookies.sessionId) {
-    await logoutUser(req.cookies.sessionId);
-  }
+  await logoutUser(req.session._id);
 
   res.clearCookie('sessionId');
   res.clearCookie('refreshToken');

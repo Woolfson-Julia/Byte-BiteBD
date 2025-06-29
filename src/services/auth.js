@@ -2,7 +2,7 @@ import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
 
-import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/index.js';
+import { ONE_DAY } from '../constants/index.js';
 import { UsersCollection } from '../models/userSchema.js';
 import { SessionsCollection } from '../models/sessionSchema.js';
 
@@ -13,7 +13,7 @@ const createSession = () => {
   return {
     accessToken,
     refreshToken,
-    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+    accessTokenValidUntil: new Date(Date.now() + ONE_DAY),
     refreshTokenValidUntil: new Date(Date.now() + ONE_DAY),
   };
 };
@@ -53,10 +53,12 @@ export const loginUser = async (payload) => {
 
   const newSession = createSession();
 
-  return await SessionsCollection.create({
+  const savedSession = await SessionsCollection.create({
     userId: user._id,
     ...newSession,
   });
+
+  return { user, session: savedSession };
 };
 
 export const logoutUser = async (sessionId) => {

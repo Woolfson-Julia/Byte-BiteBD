@@ -4,17 +4,14 @@ summary: "Get by id"
 operationId: getRecipeById
 description: 'Get by id'
 security: []
-
 parameters:
   - in: path
-    name: recipeId
+    name: id
     required: true
     schema:
       type: string
       example: "65d7e8a4b9c3d12a5d8e9b74"
     description: ID of the recipe to remove from favorites
-
-
 responses:
   '200':
     description: 'Successfully getRecipeById'
@@ -39,7 +36,7 @@ responses:
                 data:
                   type: array
                   items:
-                    $ref: '../../../components/schemas/recipe.yaml#/Recipe'
+                    $ref: '../../../components/schemas/recipe.yaml'
                 page:
                   type: integer
                   example: 1
