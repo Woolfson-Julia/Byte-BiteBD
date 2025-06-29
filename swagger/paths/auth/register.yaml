@@ -1,10 +1,9 @@
 tags:
   - Auth
-summary: Register new user
-operationId: registerUser
-description: Register a new user account
-security:
-  - bearerAuth: []
+summary: Register user
+operationId: createUser
+description: Registers a new user account and returns access token with user data
+security: []
 requestBody:
   required: true
   content:
@@ -17,22 +16,28 @@ requestBody:
           - password
         properties:
           name:
+            description: User's name
             type: string
-            example: "Julia"
+            example: John Doe
           email:
+            description: User's email
             type: string
-            example: user@example.com
+            example: john123@gmail.com
           password:
+            description: User's password
             type: string
-            example: 1234566JJ
+            example: examplepwd123
 responses:
   '201':
-    description: User successfully registered
+    description: Successfully registered a user and returned access token
     content:
       application/json:
         schema:
           type: object
-          required: [status, message, data]
+          required:
+            - status
+            - message
+            - data
           properties:
             status:
               type: integer
@@ -41,8 +46,19 @@ responses:
               type: string
               example: Successfully registered a user!
             data:
-              $ref: '../../components/schemas/user.yaml'
+              type: object
+              required:
+                - user
+                - accessToken
+              properties:
+                user:
+                  $ref: ../../components/schemas/user.yaml
+                accessToken:
+                  type: string
+                  example: msCUebr6BGhZcOO0qNLU6JbWd0AdmBKYadwnknjq
   '400':
-    $ref: '../../components/responses/400.yaml'
+    $ref: ../../components/responses/400.yaml
+  '409':
+    $ref: ../../components/responses/409.yaml
   '500':
-    $ref: '../../components/responses/500.yaml'
+    $ref: ../../components/responses/500.yaml

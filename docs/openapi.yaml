@@ -16,44 +16,55 @@ tags:
     description: Operations about ingredients.
   - name: Auth
     description: Auth operations.
+  - name: Users
+    description: Operations about users.
 servers:
-  - url: http://127.0.0.1:3000
+  - url: http://127.0.0.1:3000/api
+    description: Local server
+  - url: https://byte-bitebd.onrender.com/api
+    description: Production server
 paths:
+   /auth/register:
+    post:
+      $ref: ../swagger/paths/auth/register.yaml
+  /auth/login:
+    post:
+      $ref: ../swagger/paths/auth/login.yaml
+  /auth/logout:
+    post:
+      $ref: ../swagger/paths/auth/logout.yaml
+  /auth/refresh:
+    post:
+      $ref: ../swagger/paths/auth/refresh.yaml
+  /users/current:
+    get:
+      $ref: ../swagger/paths/users/get.yaml
+  /recipes:
+    get:
+      $ref: '../swagger/paths/recipes/get.yaml'
   /categories:
     get:
       $ref: '../swagger/paths/categories/get.yaml'
   /ingredients:
     get:
-      $ref: '../swagger/paths/ingredients/get.yaml'
-
-
-  /recipes:
-    get:
-      $ref: '../swagger/paths/recipes/get.yaml'
-
+      $ref: '../swagger/paths/ingredients/get.yaml'     
   /recipes/{id}:
     get:
-      $ref: '../swagger/paths/recipes/{id}/get.yaml'
-
+      $ref: '../swagger/paths/recipes/{id}/get.yaml'     
   /recipes/add-recipe:
     post:
       $ref: '../swagger/paths/recipes/add-recipe/post.yaml'
-
   /recipes/profile/own:
     get:
       $ref: '../swagger/paths/recipes/profile/own/get.yaml'
-
   /recipes/profile/favorites:
     get:
       $ref: '../swagger/paths/recipes/profile/favorites/get.yaml'
     post:
       $ref: '../swagger/paths/recipes/profile/favorites/post.yaml'
-
   /recipes/profile/favorites/{recipeId}:
     delete:
       $ref: '../swagger/paths/recipes/profile/favorites/{id}/delete.yaml'
-
-
 components:
   securitySchemes:
     bearerAuth:

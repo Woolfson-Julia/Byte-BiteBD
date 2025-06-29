@@ -11,7 +11,12 @@
   },
   "servers": [
     {
-      "url": "http://127.0.0.1:3000"
+      "url": "http://127.0.0.1:3000/api",
+      "description": "Local server"
+    },
+    {
+      "url": "https://byte-bitebd.onrender.com/api",
+      "description": "Production server"
     }
   ],
   "tags": [
@@ -26,6 +31,10 @@
     {
       "name": "Auth",
       "description": "Auth operations."
+    },
+    {
+      "name": "Users",
+      "description": "Operations about users."
     }
   ],
   "paths": {
