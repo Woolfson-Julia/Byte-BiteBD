@@ -20,7 +20,7 @@ const router = express.Router();
 const jsonParser = express.json();
 
 //GET
-router.get('/', ctrlWrapper(getRecipes));
+router.get('/', optionalAuthenticate, ctrlWrapper(getRecipes));
 //GET/id
 router.get('/:id', optionalAuthenticate, ctrlWrapper(getRecipeById));
 

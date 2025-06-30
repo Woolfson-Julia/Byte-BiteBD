@@ -21,10 +21,6 @@ Filtering can be done by:
   - isFavorite (whether the recipe is marked as favorite by the user)
 
 security:
-  - bearerAuth: []
-
-
-security:
 - bearerAuth: []
 parameters:
 - in: query
@@ -33,7 +29,7 @@ parameters:
     type: string
     enum:
       - _id
-      - name
+      - title
       - cals
       - cookiesTime
       - category
@@ -82,16 +78,6 @@ parameters:
     example: Japanese gohan rice
   description: Filter by recipe name
 
-components:
-schemas:
-  RecipeWithFavorite:
-    allOf:
-      - $ref: '../../../components/schemas/recipe.yaml#/Recipe'
-      - type: object
-        properties:
-          isFavorite:
-            type: boolean
-            example: true
 
 responses:
   '200':
@@ -113,7 +99,7 @@ responses:
               type: string
               example: 'Recipe found successfully'
             data:
-               $ref: '../../../../components/schemas/recipe.yaml#/Recipe'
+               $ref: '../../../../components/schemas/recipe.yaml'
             isFavorite:
               type: boolean
               example: true
@@ -121,7 +107,7 @@ responses:
 
 
 
- 
+
   '401':
     $ref: '../../../../components/responses/401.yaml'
 

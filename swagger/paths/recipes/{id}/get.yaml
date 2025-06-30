@@ -41,8 +41,7 @@ responses:
               type: string
               example: 'Recipe found successfully'
             data:
-
-              $ref: '../../../components/schemas/recipe.yaml#/Recipe'
+              $ref: '../../../components/schemas/recipe.yaml'
             isFavorite:
               type: boolean
               example: true

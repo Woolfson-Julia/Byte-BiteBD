@@ -1,7 +1,7 @@
   type: object
   required:
     - _id
-    - name
+    - title
     - decr
     - cookiesTime
     - category
@@ -13,7 +13,7 @@
     _id:
       type: string
       example: "65d7e8a4b9c3d12a5d8e9b74"
-    name:
+    title:
       type: string
       maxLength: 64
       example: "Chocolate Cake"
@@ -68,21 +68,18 @@
       example: "2024-12-05T11:00:00Z"
   example:
     _id: "6462a8f74c3d0ddd28898084"
-    name: "Japanese gohan rice"
+    title: "Japanese gohan rice"
     category: "Side"
     owner: "64c8d958249fae54bae90bb9"
     decr: "A staple in Japanese cuisine, Gohan rice is a short-grain, sticky rice…"
     cookiesTime: 30
     instruction: "STEP 1\nRinsing and soaking your rice is key to achieving the perfect …"
     ingredients:
-      - id: "640c2dd963a319ea671e3892"
-        measure: "300g"
-      - id: "640c2dd963a319ea671e37f7"
-        measure: "1 tbs"
-      - id: "640c2dd963a319ea671e3889"
-        measure: "Garnish"
-      - id: "640c2dd963a319ea671e3770"
-        measure: "Garnish"
+      "_id": "640c2dd963a319ea671e373f"
+      "name": "Pepper"
+      "desc": "A spice made from ground dried peppercorns, commonly used in cooking and as a table seasoning for its pungent and spicy flavor."
+      "img": "https://ftp.goit.study/img/so-yummy/ingredients/640c2dd963a319ea671e373f.png"
+    measure: "20g"
     recipeImg: "https://ftp.goit.study/img/so-yummy/preview/Japanese%20gohan%20rice.jpg"
     createdAt: "2023-03-11T19:25:33.247+00:00"
     updatedAt: "2023-04-14T20:02:28.085+00:00"

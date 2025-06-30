@@ -6,8 +6,8 @@ const parseSortOrder = (sortOrder) => {
 };
 
 const parseSortBy = (sortBy) => {
-  if (!sortBy) return 'name';
-  return RECIPE_SORT_KEYS.includes(sortBy) ? sortBy : 'name';
+  if (!sortBy) return 'title';
+  return RECIPE_SORT_KEYS.includes(sortBy) ? sortBy : 'title';
 };
 
 export const parseSortParams = (query) => {

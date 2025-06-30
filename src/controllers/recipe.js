@@ -9,49 +9,71 @@ import { getPhotoUrl } from '../utils/getPhotoUrl.js';
 import { isRecipeFavorite } from '../utils/isRecipeFavorite.js';
 import mongoose from 'mongoose';
 
+import { getEnrichedRecipes, getEnrichedRecipe } from '../services/ingredient.js';
 
-import {
-  getEnrichedRecipes,
-  getEnrichedRecipe,
-} from '../services/ingredient.js';
-
-
-// import { Ingredient } from '../models/ingredientSchema.js';
-// import { Category } from '../models/categorySchema.js';
 
 // /api/recipes пошук рецептів за іменем/інгрідієнтами чи категоріями
 // http://localhost:3000/api/recipes?ingredient=640c2dd963a319ea671e36f9
 export const getRecipes = async (req, res) => {
+
   const { page, perPage, skip } = parsePaginationParams(req.query);
   const filter = parseRecipeFilterParams(req.query);
-  console.log(filter);
-  const recipes = await Recipe.find(filter).skip(skip).limit(perPage);
 
+  const recipes = await Recipe.find(filter).skip(skip).limit(perPage);
   const total = await Recipe.countDocuments(filter);
 
 
-  if (!recipes || recipes.length === 0) {
-    throw createHttpError(404, 'There are no recipes matching your search!');
-  }
+   if (!recipes || recipes.length === 0) {
+      throw createHttpError(404, 'There are no recipes matching your search!');
+    }
   // передаємо в getEnrichedRecipes масив рецептів для збагачення їх інгредієнтами
   const enrichedRecipes = await getEnrichedRecipes(recipes);
-  //повертаємо збагачені рецепти
-  res.json({
-    status: 200,
-    message: 'Successfully found recipes!',
-    data: {
-      // data: recipes,
-      data: enrichedRecipes,
-      page,
-      perPage,
-      totalItems: total,
-      totalPages: Math.ceil(total / perPage),
-      hasPreviousPage: page > 1,
-      hasNextPage: page < Math.ceil(total / perPage),
-    },
-  });
-};
 
+
+    // Якщо користувач є, перевіряємо для кожного рецепта, чи є він у фейворітс
+    if (req.user) {
+      // Масив з промісів для перевірки фейворітів кожного рецепта
+      const favoritesChecks = enrichedRecipes.map(async (recipe) => {
+        const isFavorite = await isRecipeFavorite(req.user._id, recipe._id);
+        return {
+          ...recipe,
+          isFavorite,
+        };
+      });
+
+      // Чекаємо, поки всі проміси завершаться
+      const enrichedWithFavorites = await Promise.all(favoritesChecks);
+
+      return res.json({
+        status: 200,
+        message: 'Successfully found recipes!',
+        data: {
+          data: enrichedWithFavorites,
+          page,
+          perPage,
+          totalItems: total,
+          totalPages: Math.ceil(total / perPage),
+          hasPreviousPage: page > 1,
+          hasNextPage: page < Math.ceil(total / perPage),
+        },
+      });
+    } else {
+      // Якщо користувача немає — повертаємо без поля isFavorite
+      res.json({
+        status: 200,
+        message: 'Successfully found recipes!',
+        data: {
+          data: enrichedRecipes,
+          page,
+          perPage,
+          totalItems: total,
+          totalPages: Math.ceil(total / perPage),
+          hasPreviousPage: page > 1,
+          hasNextPage: page < Math.ceil(total / perPage),
+        },
+      });
+    }
+};
 
 // /api/recipes/:id пошук для отримання детальної інформації про рецепт за його id
 // http://localhost:3000/api/recipes?ingredient=640c2dd963a319ea671e36f9
@@ -80,42 +102,16 @@ if (req.user) {
   const enrichedRecipe = await getEnrichedRecipe(recipe);
   //повертає збагачений рецепт
   // res.status(200).json(recipe);
-    
+
   res.status(200).json({
     status: 200,
     message: 'Recipe found successfully',
     data: { ...enrichedRecipe, isFavorite }
   });
-
 };
 
 // /add-recipe приватний ендпоінт для створення власного рецепту
 // http://localhost:3000/api/recipes/add-recipe
-
-// {
-//   "name": "Bіваіаe",
-//   "category": "Dessert",
-//   "area": "British",
-//   "instruction": "Heat oven to 180C/160C fan/gas 4 and line the base and sides of a 20cm...",
-//   "decr": "A classic British cake made with almond sponge cake and covered with marzipan.",
-//   "thumb": "https://ftp.goit.study/img/so-yummy/preview/Battenberg%20Cake.jpg",
-//   "cookiesTime": 60,
-//   "ingredientAmount": "12",
-//   "ingredients": [
-//     { "id": "1", "name": "almond sponge", "measure": "200g" },
-//     { "id": "2", "name": "marzipan", "measure": "150g" },
-//     { "id": "3", "name": "butter", "measure": "100g" },
-
-//     { "id": "5", "name": "eggs", "measure": "3" },
-//     { "id": "6", "name": "flour", "measure": "150g" },
-//     { "id": "7", "name": "baking powder", "measure": "1 tsp" },
-//     { "id": "8", "name": "vanilla extract", "measure": "1 tsp" },
-//     { "id": "9", "name": "food coloring", "measure": "as needed" },
-//     { "id": "10", "name": "jam", "measure": "100g" },
-//     { "id": "11", "name": "almond essence", "measure": "1 tsp" },
-//     { "id": "12", "name": "powdered sugar", "measure": "for dusting" }
-//   ]
-// }
 
 export const createRecipe = async (req, res, next) => {
   const ownerId = req.user._id;
@@ -131,6 +127,7 @@ export const createRecipe = async (req, res, next) => {
   };
 
   const newRecipe = await Recipe.create(newRecipeData);
+
 
   res.status(201).json({
     status: 201,
@@ -174,11 +171,14 @@ export const getMyRecipes = async (req, res, next) => {
       })
     );
 
+  // передаємо в getEnrichedRecipes масив рецептів для збагачення їх інгредієнтами
+  const enrichedRecipes = await getEnrichedRecipes(recipesWithFavorite);
+
     res.status(200).json({
       status: 200,
       message: 'Successfully found recipes!',
       data: {
-        recipes: recipesWithFavorite,
+        recipes: enrichedRecipes,
         page,
         perPage,
         totalItems,
@@ -235,13 +235,20 @@ export const addToFavorites = async (req, res, next) => {
   const totalItems = user.favorites.length;
   const totalPages = Math.ceil(totalItems / perPage);
 
+
+
+  // передаємо в getEnrichedRecipes масив рецептів для збагачення їх інгредієнтами
+  const enrichedRecipes = await getEnrichedRecipes(populatedUser.favorites);
+
+
+
   res.status(200).json({
     status: 200,
     message: alreadyInFavorites
       ? 'Recipe already in favorites'
       : 'Recipe added to favorites',
     data: {
-      favorites: populatedUser.favorites,
+      favorites: enrichedRecipes,
       page,
       perPage,
       totalItems,
@@ -280,11 +287,27 @@ export const removeFavorite = async (req, res, next) => {
 
   await user.save();
 
+
+
+  // Завантажити повні об'єкти рецептів, що залишилися у списку favorites
+  const enrichedFavorites = await Recipe.find({
+    _id: { $in: user.favorites },
+  });
+
+
+
+    // передаємо в getEnrichedRecipes масив рецептів для збагачення їх інгредієнтами
+  const enrichedRecipes = await getEnrichedRecipes(enrichedFavorites);
+
+
+
+
+
   res.status(200).json({
     status: 200,
     message: 'Recipe removed from favorites successfully',
     data: {
-      favorites: user.favorites,
+      favorites: enrichedRecipes, // повертаємо повні об'єкти рецептів
     },
   });
 };
@@ -321,11 +344,19 @@ export const getFavorites = async (req, res, next) => {
     .limit(perPage)
     .sort({ createdAt: -1 });
 
+
+
+      // передаємо в getEnrichedRecipes масив рецептів для збагачення їх інгредієнтами
+  const enrichedRecipes = await getEnrichedRecipes(favorites);
+
+
+
+
   res.status(200).json({
     status: 200,
     message: 'Successfully retrieved favorite recipes',
     data: {
-      favorites,
+      enrichedRecipes,
       page,
       perPage,
       totalItems,
