@@ -1,60 +1,101 @@
 tags:
   - Recipes
-summary: Get my own recipes with pagination and sorting
+summary: Get all recipes added by the user with pagination, sorting, and filtering
 operationId: getMyRecipes
-description: 'Get paginated list of recipes created by the authenticated user'
+description: |
+  Retrieve all recipes added by the authenticated user with support for pagination, sorting, and filtering.
+  The response includes pagination info:
+    "page": 1,
+    "perPage": 12,
+    "totalItems": 4,
+    "totalPages": 1,
+    "hasPreviousPage": false,
+    "hasNextPage": false
+
+Sorting is supported on the following fields:
+  _id, name, cals, cookiesTime, category, createdAt, updatedAt
+
+Filtering can be done by:
+  - name (partial or full match)
+  - category
+  - isFavorite (whether the recipe is marked as favorite by the user)
+
 security:
   - bearerAuth: []
+
+
+security:
+- bearerAuth: []
 parameters:
+- in: query
+  name: sortBy
+  schema:
+    type: string
+    enum:
+      - _id
+      - name
+      - cals
+      - cookiesTime
+      - category
+      - createdAt
+      - updatedAt
+    default: createdAt
+  description: Field to sort by
+- in: query
+  name: sortOrder
+  schema:
+    type: string
+    enum: [asc, desc]
+    default: desc
+  description: Sort order:ascending or descending
+- in: query
+  name: page
+  schema:
+    type: integer
+    example: 1
+    minimum: 1
+  description: Page number for pagination
+- in: query
+  name: perPage
+  schema:
+    type: integer
+    example: 10
+    minimum: 1
+    maximum: 100
+  description: Number of items per page
+- in: query
+  name: category
+  schema:
+    type: string
+    example: dessert
+  description: Filter by category
+- in: query
+  name: ingredient
+  schema:
+    type: string
+    example: chocolate
+  description: Filter by ingredient
+- in: query
+  name: title
+  schema:
+    type: string
+    example: Japanese gohan rice
+  description: Filter by recipe name
 
-  - in: query
-    name: sortBy
-    schema:
-      type: string
-      default: createdAt
-    description: Field to sort by
-  - in: query
-    name: sortOrder
-    schema:
-      type: string
-      enum: [asc, desc]
-      default: desc
-    description: Sort order:ascending or descending
-  - in: query
-    name: page
-    schema:
-      type: integer
-      example: 1
-    description: Page number for pagination
-  - in: query
-    name: perPage
-    schema:
-      type: integer
-      example: 10
-    description: Number of items per page
-  - in: query
-    name: category
-    schema:
-      type: string
-      example: 'dessert'
-    description: Filter by category
-  - in: query
-    name: ingredient
-    schema:
-      type: string
-      example: 'chocolate'
-    description: Filter by ingredient
-  - in: query
-    name: title
-    schema:
-      type: string
-      example: 'Japanese gohan rice'
-    description: Filter by name
-
+components:
+schemas:
+  RecipeWithFavorite:
+    allOf:
+      - $ref: '../../../components/schemas/recipe.yaml#/Recipe'
+      - type: object
+        properties:
+          isFavorite:
+            type: boolean
+            example: true
 
 responses:
   '200':
-    description: Successfully found recipes
+    description: 'Recipe found successfully'
     content:
       application/json:
         schema:
@@ -63,49 +104,42 @@ responses:
             - status
             - message
             - data
+            - isFavorite
           properties:
             status:
               type: integer
               example: 200
             message:
               type: string
-              example: Successfully found recipes!
+              example: 'Recipe found successfully'
             data:
-              type: object
-              required:
-                - recipes
-                - page
-                - perPage
-                - totalItems
-                - totalPages
-                - hasPreviousPage
-                - hasNextPage
-              properties:
-                recipes:
-                  type: array
-                  items:
-                    $ref: '../../../../components/schemas/recipe.yaml'
-                page:
-                  type: integer
-                  example: 2
-                perPage:
-                  type: integer
-                  example: 5
-                totalItems:
-                  type: integer
-                  example: 42
-                totalPages:
-                  type: integer
-                  example: 9
-                hasPreviousPage:
-                  type: boolean
-                  example: true
-                hasNextPage:
-                  type: boolean
-                  example: true
+               $ref: '../../../../components/schemas/recipe.yaml#/Recipe'
+            isFavorite:
+              type: boolean
+              example: true
+
+
+
+
+ 
   '401':
     $ref: '../../../../components/responses/401.yaml'
+
   '404':
-    $ref: '../../../../components/responses/404.yaml'
+    description: There are no recipes yet!
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: There are no recipes yet!
   '500':
     $ref: '../../../../components/responses/500.yaml'

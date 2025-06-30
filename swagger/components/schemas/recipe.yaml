@@ -54,6 +54,10 @@
     owner:
       type: string
       example: "65d123abc9876543210fedcb"
+    isFavorite:
+      type: boolean
+      nullable: true
+      example: true
     createdAt:
       type: string
       format: date-time

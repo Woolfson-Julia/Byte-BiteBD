@@ -47,10 +47,12 @@
         "tags": [
           "Auth"
         ],
+
         "summary": "Register user",
         "operationId": "createUser",
         "description": "Registers a new user account and returns access token with user data",
         "security": [],
+
         "requestBody": {
           "required": true,
           "content": {
@@ -64,6 +66,7 @@
                 ],
                 "properties": {
                   "name": {
+
                     "description": "User's name",
                     "type": "string",
                     "example": "John Doe"
@@ -77,6 +80,7 @@
                     "description": "User's password",
                     "type": "string",
                     "example": "examplepwd123"
+
                   }
                 }
               }
@@ -85,7 +89,9 @@
         },
         "responses": {
           "201": {
+
             "description": "Successfully registered a user and returned access token",
+
             "content": {
               "application/json": {
                 "schema": {
@@ -105,6 +111,7 @@
                       "example": "Successfully registered a user!"
                     },
                     "data": {
+
                       "type": "object",
                       "required": [
                         "user",
@@ -119,6 +126,7 @@
                           "example": "msCUebr6BGhZcOO0qNLU6JbWd0AdmBKYadwnknjq"
                         }
                       }
+
                     }
                   }
                 }
@@ -128,9 +136,11 @@
           "400": {
             "$ref": "#/components/responses/400"
           },
+
           "409": {
             "$ref": "#/components/responses/409"
           },
+
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -142,10 +152,12 @@
         "tags": [
           "Auth"
         ],
+
         "summary": "Login user",
         "operationId": "loginUser",
         "description": "Authenticate an existing user and return access token with user data",
         "security": [],
+
         "requestBody": {
           "required": true,
           "content": {
@@ -158,6 +170,7 @@
                 ],
                 "properties": {
                   "email": {
+
                     "description": "User's email",
                     "type": "string",
                     "example": "john123@gmail.com"
@@ -166,6 +179,7 @@
                     "description": "User's password",
                     "type": "string",
                     "example": "examplepwd123"
+
                   }
                 }
               }
@@ -174,7 +188,9 @@
         },
         "responses": {
           "200": {
+
             "description": "Successfully authenticated the user and returned an access token",
+
             "content": {
               "application/json": {
                 "schema": {
@@ -191,11 +207,14 @@
                     },
                     "message": {
                       "type": "string",
+
                       "example": "Successfully logged in a user!"
+
                     },
                     "data": {
                       "type": "object",
                       "required": [
+
                         "user",
                         "accessToken"
                       ],
@@ -206,6 +225,7 @@
                         "accessToken": {
                           "type": "string",
                           "example": "msCUebr6BGhZcOO0qNLU6JbWd0AdmBKYadwnknjq"
+
                         }
                       }
                     }
@@ -231,9 +251,11 @@
         "tags": [
           "Auth"
         ],
+
         "summary": "Logout user",
         "operationId": "logoutUser",
         "description": "Logs out the authenticated user by deleting the session.",
+
         "security": [
           {
             "bearerAuth": []
@@ -241,14 +263,18 @@
         ],
         "responses": {
           "204": {
+
             "description": "Successfully logged out. No content is returned."
+
           },
           "401": {
             "$ref": "#/components/responses/401"
           },
+
           "404": {
             "$ref": "#/components/responses/404"
           },
+
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -260,6 +286,7 @@
         "tags": [
           "Auth"
         ],
+
         "summary": "Refresh session",
         "operationId": "refreshSession",
         "description": "Refreshes the user's session by issuing a new access token and updating session cookies.\n\n⚠️ **Swagger UI does not store cookies. Please use Postman or your frontend to test this route properly.**\n",
@@ -267,6 +294,7 @@
         "responses": {
           "200": {
             "description": "Successfully refreshed the session and returned a new access token",
+
             "content": {
               "application/json": {
                 "schema": {
@@ -293,7 +321,9 @@
                       "properties": {
                         "accessToken": {
                           "type": "string",
+
                           "example": "msCUebr6BGhZcOO0qNLU6JbWd0AdmBKYadwnknjq"
+
                         }
                       }
                     }
@@ -311,6 +341,7 @@
         }
       }
     },
+
     "/users/current": {
       "get": {
         "tags": [
@@ -365,6 +396,7 @@
         }
       }
     },
+
     "/categories": {
       "get": {
         "operationId": "getCategories",
@@ -663,9 +695,10 @@
         "tags": [
           "Recipes"
         ],
-        "summary": "Get by id",
+        "summary": "Get a single recipe by its ID",
         "operationId": "getRecipeById",
-        "description": "Get by id",
+        "description": "Retrieve detailed information about a specific recipe using its unique ID.\nOptionally supports authentication — if a valid access token is provided, the response will include a `isFavorite` field indicating whether the recipe is in the user's favorites list.\n",
+        "Example request": "`GET http://localhost:3000/api/recipes/6462a8f74c3d0ddd28898016`\n",
         "security": [],
         "parameters": [
           {
@@ -676,12 +709,12 @@
               "type": "string",
               "example": "65d7e8a4b9c3d12a5d8e9b74"
             },
-            "description": "ID of the recipe to remove from favorites"
+            "description": "Pass only the recipe ID"
           }
         ],
         "responses": {
           "200": {
-            "description": "Successfully getRecipeById",
+            "description": "Recipe found successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -689,7 +722,8 @@
                   "required": [
                     "status",
                     "message",
-                    "data"
+                    "data",
+                    "isFavorite"
                   ],
                   "properties": {
                     "status": {
@@ -698,9 +732,10 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully found recipe!"
+                      "example": "Recipe found successfully"
                     },
                     "data": {
+
                       "type": "object",
                       "properties": {
                         "data": {
@@ -734,17 +769,63 @@
                           "example": true
                         }
                       }
+
                     }
                   }
                 }
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/401"
+          "400": {
+            "description": "Invalid recipe ID format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid recipe ID format"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "$ref": "#/components/responses/404"
+            "description": "Recipe not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Recipe not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
           }
         }
       }
@@ -1432,35 +1513,45 @@
         ],
         "properties": {
           "_id": {
+
             "description": "User's id",
+
             "type": "string",
             "example": "65e4decdd286b30065d54af9"
           },
           "name": {
+
             "description": "User's name",
+
             "type": "string",
             "example": "John Doe"
           },
           "email": {
+
             "description": "User's email",
+
             "type": "string",
             "example": "john123@gmail.com"
           },
           "createdAt": {
             "type": "string",
             "format": "date-time",
+
             "description": "User's created date",
+
             "example": "2025-03-27T19:43:21.686+00:00"
           },
           "updatedAt": {
             "type": "string",
             "format": "date-time",
+
             "description": "User's updated date",
             "example": "2025-03-27T19:43:21.686+00:00"
           }
         }
       },
       "category": {
+
         "type": "object",
         "required": [
           "_id",
@@ -1601,6 +1692,11 @@
           "owner": {
             "type": "string",
             "example": "65d123abc9876543210fedcb"
+          },
+          "isFavorite": {
+            "type": "boolean",
+            "nullable": true,
+            "example": true
           },
           "createdAt": {
             "type": "string",
