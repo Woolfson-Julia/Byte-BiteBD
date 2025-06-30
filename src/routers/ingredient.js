@@ -6,5 +6,5 @@ const router = Router();
 const jsonParser = express.json();
 
 router.get('/', jsonParser, getIngredients);
-
+router.get('/:id', jsonParser, getIngredients);
 export default router;
