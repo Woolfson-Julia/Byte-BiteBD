@@ -2,7 +2,7 @@ import path from 'node:path';
 
 export const RECIPE_SORT_KEYS = [
   '_id',
-  'name',
+  'title',
   'cals',
   'cookiesTime',
   'category',

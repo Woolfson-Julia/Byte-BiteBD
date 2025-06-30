@@ -9,8 +9,8 @@ export const parseRecipeFilterParams = (query) => {
     filter['ingredients.id'] = query.ingredient;
   }
 
-  if (query.name) {
-    filter.name = { $regex: query.name, $options: 'i' };
+  if (query.title) {
+    filter.title = { $regex: query.title, $options: 'i' };
   }
 
   return filter;

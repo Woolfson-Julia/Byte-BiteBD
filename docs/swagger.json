@@ -47,12 +47,10 @@
         "tags": [
           "Auth"
         ],
-
         "summary": "Register user",
         "operationId": "createUser",
         "description": "Registers a new user account and returns access token with user data",
         "security": [],
-
         "requestBody": {
           "required": true,
           "content": {
@@ -66,7 +64,6 @@
                 ],
                 "properties": {
                   "name": {
-
                     "description": "User's name",
                     "type": "string",
                     "example": "John Doe"
@@ -80,7 +77,6 @@
                     "description": "User's password",
                     "type": "string",
                     "example": "examplepwd123"
-
                   }
                 }
               }
@@ -89,9 +85,7 @@
         },
         "responses": {
           "201": {
-
             "description": "Successfully registered a user and returned access token",
-
             "content": {
               "application/json": {
                 "schema": {
@@ -111,7 +105,6 @@
                       "example": "Successfully registered a user!"
                     },
                     "data": {
-
                       "type": "object",
                       "required": [
                         "user",
@@ -126,7 +119,6 @@
                           "example": "msCUebr6BGhZcOO0qNLU6JbWd0AdmBKYadwnknjq"
                         }
                       }
-
                     }
                   }
                 }
@@ -136,11 +128,9 @@
           "400": {
             "$ref": "#/components/responses/400"
           },
-
           "409": {
             "$ref": "#/components/responses/409"
           },
-
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -152,12 +142,10 @@
         "tags": [
           "Auth"
         ],
-
         "summary": "Login user",
         "operationId": "loginUser",
         "description": "Authenticate an existing user and return access token with user data",
         "security": [],
-
         "requestBody": {
           "required": true,
           "content": {
@@ -170,7 +158,6 @@
                 ],
                 "properties": {
                   "email": {
-
                     "description": "User's email",
                     "type": "string",
                     "example": "john123@gmail.com"
@@ -179,7 +166,6 @@
                     "description": "User's password",
                     "type": "string",
                     "example": "examplepwd123"
-
                   }
                 }
               }
@@ -188,9 +174,7 @@
         },
         "responses": {
           "200": {
-
             "description": "Successfully authenticated the user and returned an access token",
-
             "content": {
               "application/json": {
                 "schema": {
@@ -207,14 +191,11 @@
                     },
                     "message": {
                       "type": "string",
-
                       "example": "Successfully logged in a user!"
-
                     },
                     "data": {
                       "type": "object",
                       "required": [
-
                         "user",
                         "accessToken"
                       ],
@@ -225,7 +206,6 @@
                         "accessToken": {
                           "type": "string",
                           "example": "msCUebr6BGhZcOO0qNLU6JbWd0AdmBKYadwnknjq"
-
                         }
                       }
                     }
@@ -251,11 +231,9 @@
         "tags": [
           "Auth"
         ],
-
         "summary": "Logout user",
         "operationId": "logoutUser",
         "description": "Logs out the authenticated user by deleting the session.",
-
         "security": [
           {
             "bearerAuth": []
@@ -263,18 +241,14 @@
         ],
         "responses": {
           "204": {
-
             "description": "Successfully logged out. No content is returned."
-
           },
           "401": {
             "$ref": "#/components/responses/401"
           },
-
           "404": {
             "$ref": "#/components/responses/404"
           },
-
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -286,7 +260,6 @@
         "tags": [
           "Auth"
         ],
-
         "summary": "Refresh session",
         "operationId": "refreshSession",
         "description": "Refreshes the user's session by issuing a new access token and updating session cookies.\n\n⚠️ **Swagger UI does not store cookies. Please use Postman or your frontend to test this route properly.**\n",
@@ -294,7 +267,6 @@
         "responses": {
           "200": {
             "description": "Successfully refreshed the session and returned a new access token",
-
             "content": {
               "application/json": {
                 "schema": {
@@ -321,9 +293,7 @@
                       "properties": {
                         "accessToken": {
                           "type": "string",
-
                           "example": "msCUebr6BGhZcOO0qNLU6JbWd0AdmBKYadwnknjq"
-
                         }
                       }
                     }
@@ -341,7 +311,6 @@
         }
       }
     },
-
     "/users/current": {
       "get": {
         "tags": [
@@ -396,7 +365,6 @@
         }
       }
     },
-
     "/categories": {
       "get": {
         "operationId": "getCategories",
@@ -735,41 +703,11 @@
                       "example": "Recipe found successfully"
                     },
                     "data": {
-
-                      "type": "object",
-                      "properties": {
-                        "data": {
-                          "type": "array",
-                          "items": {
-                            "$ref": "#/components/schemas/recipe"
-                          }
-                        },
-                        "page": {
-                          "type": "integer",
-                          "example": 1
-                        },
-                        "perPage": {
-                          "type": "integer",
-                          "example": 10
-                        },
-                        "totalItems": {
-                          "type": "integer",
-                          "example": 45
-                        },
-                        "totalPages": {
-                          "type": "integer",
-                          "example": 5
-                        },
-                        "hasPreviousPage": {
-                          "type": "boolean",
-                          "example": false
-                        },
-                        "hasNextPage": {
-                          "type": "boolean",
-                          "example": true
-                        }
-                      }
-
+                      "$ref": "#/components/schemas/recipe"
+                    },
+                    "isFavorite": {
+                      "type": "boolean",
+                      "example": true
                     }
                   }
                 }
@@ -971,9 +909,15 @@
         "tags": [
           "Recipes"
         ],
-        "summary": "Get my own recipes with pagination and sorting",
+        "summary": "Get all recipes added by the user with pagination, sorting, and filtering",
         "operationId": "getMyRecipes",
-        "description": "Get paginated list of recipes created by the authenticated user",
+        "description": "Retrieve all recipes added by the authenticated user with support for pagination, sorting, and filtering.\nThe response includes pagination info:\n  \"page\": 1,\n  \"perPage\": 12,\n  \"totalItems\": 4,\n  \"totalPages\": 1,\n  \"hasPreviousPage\": false,\n  \"hasNextPage\": false\n",
+        "Sorting is supported on the following fields": "_id, name, cals, cookiesTime, category, createdAt, updatedAt",
+        "Filtering can be done by": [
+          "name (partial or full match)",
+          "category",
+          "isFavorite (whether the recipe is marked as favorite by the user)"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -985,6 +929,15 @@
             "name": "sortBy",
             "schema": {
               "type": "string",
+              "enum": [
+                "_id",
+                "title",
+                "cals",
+                "cookiesTime",
+                "category",
+                "createdAt",
+                "updatedAt"
+              ],
               "default": "createdAt"
             },
             "description": "Field to sort by"
@@ -1007,7 +960,8 @@
             "name": "page",
             "schema": {
               "type": "integer",
-              "example": 1
+              "example": 1,
+              "minimum": 1
             },
             "description": "Page number for pagination"
           },
@@ -1016,7 +970,9 @@
             "name": "perPage",
             "schema": {
               "type": "integer",
-              "example": 10
+              "example": 10,
+              "minimum": 1,
+              "maximum": 100
             },
             "description": "Number of items per page"
           },
@@ -1045,12 +1001,12 @@
               "type": "string",
               "example": "Japanese gohan rice"
             },
-            "description": "Filter by name"
+            "description": "Filter by recipe name"
           }
         ],
         "responses": {
           "200": {
-            "description": "Successfully found recipes",
+            "description": "Recipe found successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -1058,7 +1014,8 @@
                   "required": [
                     "status",
                     "message",
-                    "data"
+                    "data",
+                    "isFavorite"
                   ],
                   "properties": {
                     "status": {
@@ -1067,51 +1024,14 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully found recipes!"
+                      "example": "Recipe found successfully"
                     },
                     "data": {
-                      "type": "object",
-                      "required": [
-                        "recipes",
-                        "page",
-                        "perPage",
-                        "totalItems",
-                        "totalPages",
-                        "hasPreviousPage",
-                        "hasNextPage"
-                      ],
-                      "properties": {
-                        "recipes": {
-                          "type": "array",
-                          "items": {
-                            "$ref": "#/components/schemas/recipe"
-                          }
-                        },
-                        "page": {
-                          "type": "integer",
-                          "example": 2
-                        },
-                        "perPage": {
-                          "type": "integer",
-                          "example": 5
-                        },
-                        "totalItems": {
-                          "type": "integer",
-                          "example": 42
-                        },
-                        "totalPages": {
-                          "type": "integer",
-                          "example": 9
-                        },
-                        "hasPreviousPage": {
-                          "type": "boolean",
-                          "example": true
-                        },
-                        "hasNextPage": {
-                          "type": "boolean",
-                          "example": true
-                        }
-                      }
+                      "$ref": "#/components/schemas/recipe"
+                    },
+                    "isFavorite": {
+                      "type": "boolean",
+                      "example": true
                     }
                   }
                 }
@@ -1122,7 +1042,28 @@
             "$ref": "#/components/responses/401"
           },
           "404": {
-            "$ref": "#/components/responses/404"
+            "description": "There are no recipes yet!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "There are no recipes yet!"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -1513,45 +1454,35 @@
         ],
         "properties": {
           "_id": {
-
             "description": "User's id",
-
             "type": "string",
             "example": "65e4decdd286b30065d54af9"
           },
           "name": {
-
             "description": "User's name",
-
             "type": "string",
             "example": "John Doe"
           },
           "email": {
-
             "description": "User's email",
-
             "type": "string",
             "example": "john123@gmail.com"
           },
           "createdAt": {
             "type": "string",
             "format": "date-time",
-
             "description": "User's created date",
-
             "example": "2025-03-27T19:43:21.686+00:00"
           },
           "updatedAt": {
             "type": "string",
             "format": "date-time",
-
             "description": "User's updated date",
             "example": "2025-03-27T19:43:21.686+00:00"
           }
         }
       },
       "category": {
-
         "type": "object",
         "required": [
           "_id",
@@ -1621,7 +1552,7 @@
         "type": "object",
         "required": [
           "_id",
-          "name",
+          "title",
           "decr",
           "cookiesTime",
           "category",
@@ -1635,7 +1566,7 @@
             "type": "string",
             "example": "65d7e8a4b9c3d12a5d8e9b74"
           },
-          "name": {
+          "title": {
             "type": "string",
             "maxLength": 64,
             "example": "Chocolate Cake"
@@ -1711,30 +1642,19 @@
         },
         "example": {
           "_id": "6462a8f74c3d0ddd28898084",
-          "name": "Japanese gohan rice",
+          "title": "Japanese gohan rice",
           "category": "Side",
           "owner": "64c8d958249fae54bae90bb9",
           "decr": "A staple in Japanese cuisine, Gohan rice is a short-grain, sticky rice…",
           "cookiesTime": 30,
           "instruction": "STEP 1\nRinsing and soaking your rice is key to achieving the perfect …",
-          "ingredients": [
-            {
-              "id": "640c2dd963a319ea671e3892",
-              "measure": "300g"
-            },
-            {
-              "id": "640c2dd963a319ea671e37f7",
-              "measure": "1 tbs"
-            },
-            {
-              "id": "640c2dd963a319ea671e3889",
-              "measure": "Garnish"
-            },
-            {
-              "id": "640c2dd963a319ea671e3770",
-              "measure": "Garnish"
-            }
-          ],
+          "ingredients": {
+            "_id": "640c2dd963a319ea671e373f",
+            "name": "Pepper",
+            "desc": "A spice made from ground dried peppercorns, commonly used in cooking and as a table seasoning for its pungent and spicy flavor.",
+            "img": "https://ftp.goit.study/img/so-yummy/ingredients/640c2dd963a319ea671e373f.png"
+          },
+          "measure": "20g",
           "recipeImg": "https://ftp.goit.study/img/so-yummy/preview/Japanese%20gohan%20rice.jpg",
           "createdAt": "2023-03-11T19:25:33.247+00:00",
           "updatedAt": "2023-04-14T20:02:28.085+00:00"
