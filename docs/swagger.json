@@ -47,14 +47,12 @@
         "tags": [
           "Auth"
         ],
-        "summary": "Register new user",
-        "operationId": "registerUser",
-        "description": "Register a new user account",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+
+        "summary": "Register user",
+        "operationId": "createUser",
+        "description": "Registers a new user account and returns access token with user data",
+        "security": [],
+
         "requestBody": {
           "required": true,
           "content": {
@@ -68,16 +66,21 @@
                 ],
                 "properties": {
                   "name": {
+
+                    "description": "User's name",
                     "type": "string",
-                    "example": "Julia"
+                    "example": "John Doe"
                   },
                   "email": {
+                    "description": "User's email",
                     "type": "string",
-                    "example": "user@example.com"
+                    "example": "john123@gmail.com"
                   },
                   "password": {
+                    "description": "User's password",
                     "type": "string",
-                    "example": "1234566JJ"
+                    "example": "examplepwd123"
+
                   }
                 }
               }
@@ -86,7 +89,9 @@
         },
         "responses": {
           "201": {
-            "description": "User successfully registered",
+
+            "description": "Successfully registered a user and returned access token",
+
             "content": {
               "application/json": {
                 "schema": {
@@ -106,7 +111,22 @@
                       "example": "Successfully registered a user!"
                     },
                     "data": {
-                      "$ref": "#/components/schemas/user"
+
+                      "type": "object",
+                      "required": [
+                        "user",
+                        "accessToken"
+                      ],
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/user"
+                        },
+                        "accessToken": {
+                          "type": "string",
+                          "example": "msCUebr6BGhZcOO0qNLU6JbWd0AdmBKYadwnknjq"
+                        }
+                      }
+
                     }
                   }
                 }
@@ -116,6 +136,11 @@
           "400": {
             "$ref": "#/components/responses/400"
           },
+
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -127,14 +152,12 @@
         "tags": [
           "Auth"
         ],
-        "summary": "User login",
+
+        "summary": "Login user",
         "operationId": "loginUser",
-        "description": "Authenticate user and return access token",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "description": "Authenticate an existing user and return access token with user data",
+        "security": [],
+
         "requestBody": {
           "required": true,
           "content": {
@@ -147,12 +170,16 @@
                 ],
                 "properties": {
                   "email": {
+
+                    "description": "User's email",
                     "type": "string",
-                    "example": "user@example.com"
+                    "example": "john123@gmail.com"
                   },
                   "password": {
+                    "description": "User's password",
                     "type": "string",
-                    "example": "1234566JJ"
+                    "example": "examplepwd123"
+
                   }
                 }
               }
@@ -161,7 +188,9 @@
         },
         "responses": {
           "200": {
-            "description": "Successfully logged in an user!",
+
+            "description": "Successfully authenticated the user and returned an access token",
+
             "content": {
               "application/json": {
                 "schema": {
@@ -178,17 +207,25 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully registered a user!"
+
+                      "example": "Successfully logged in a user!"
+
                     },
                     "data": {
                       "type": "object",
                       "required": [
+
+                        "user",
                         "accessToken"
                       ],
                       "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/user"
+                        },
                         "accessToken": {
                           "type": "string",
-                          "example": "Y12l/GjxtA2cV69sXhLsdqncNQCv76u2Mm0r8Fvs"
+                          "example": "msCUebr6BGhZcOO0qNLU6JbWd0AdmBKYadwnknjq"
+
                         }
                       }
                     }
@@ -214,9 +251,11 @@
         "tags": [
           "Auth"
         ],
-        "summary": "User logout",
+
+        "summary": "Logout user",
         "operationId": "logoutUser",
-        "description": "Logs out the user by clearing the session or tokens.",
+        "description": "Logs out the authenticated user by deleting the session.",
+
         "security": [
           {
             "bearerAuth": []
@@ -224,11 +263,18 @@
         ],
         "responses": {
           "204": {
-            "description": "User successfully logged out (no content)"
+
+            "description": "Successfully logged out. No content is returned."
+
           },
           "401": {
             "$ref": "#/components/responses/401"
           },
+
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -240,17 +286,15 @@
         "tags": [
           "Auth"
         ],
-        "summary": "Refresh token",
-        "operationId": "refreshToken",
-        "description": "Refresh user session using cookies and return a new access token",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+
+        "summary": "Refresh session",
+        "operationId": "refreshSession",
+        "description": "Refreshes the user's session by issuing a new access token and updating session cookies.\n\n⚠️ **Swagger UI does not store cookies. Please use Postman or your frontend to test this route properly.**\n",
+        "security": [],
         "responses": {
           "200": {
-            "description": "Successfully refreshed a session and returned new access token",
+            "description": "Successfully refreshed the session and returned a new access token",
+
             "content": {
               "application/json": {
                 "schema": {
@@ -277,7 +321,9 @@
                       "properties": {
                         "accessToken": {
                           "type": "string",
-                          "example": "Y12l/GjxtA2cV69sXhLsdqncNQCv76u2Mm0r8Fvs"
+
+                          "example": "msCUebr6BGhZcOO0qNLU6JbWd0AdmBKYadwnknjq"
+
                         }
                       }
                     }
@@ -295,7 +341,62 @@
         }
       }
     },
-    "/users/current": null,
+
+    "/users/current": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get current user",
+        "operationId": "getCurrentUser",
+        "description": "Returns the currently authenticated user's information",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved current user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found user!"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+
     "/categories": {
       "get": {
         "operationId": "getCategories",
@@ -324,7 +425,7 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/Category"
+                        "$ref": "#/components/schemas/category"
                       }
                     }
                   }
@@ -403,7 +504,7 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/Ingredient"
+                        "$ref": "#/components/schemas/ingredient"
                       }
                     }
                   }
@@ -546,7 +647,7 @@
                         "data": {
                           "type": "array",
                           "items": {
-                            "$ref": "#/components/schemas/Recipe"
+                            "$ref": "#/components/schemas/recipe"
                           }
                         },
                         "page": {
@@ -634,11 +735,41 @@
                       "example": "Recipe found successfully"
                     },
                     "data": {
-                      "$ref": "#/components/schemas/Recipe"
-                    },
-                    "isFavorite": {
-                      "type": "boolean",
-                      "example": true
+
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/recipe"
+                          }
+                        },
+                        "page": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "perPage": {
+                          "type": "integer",
+                          "example": 10
+                        },
+                        "totalItems": {
+                          "type": "integer",
+                          "example": 45
+                        },
+                        "totalPages": {
+                          "type": "integer",
+                          "example": 5
+                        },
+                        "hasPreviousPage": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
+
                     }
                   }
                 }
@@ -744,10 +875,12 @@
                     "example": 45
                   },
                   "cals": {
-                    "type": "integer",
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
                     "minimum": 1,
                     "maximum": 10000,
-                    "nullable": true,
                     "example": 320
                   },
                   "category": {
@@ -814,7 +947,7 @@
                     },
                     "data": {
                       "type": "object",
-                      "$ref": "#/components/schemas/Recipe"
+                      "$ref": "#/components/schemas/recipe"
                     }
                   }
                 }
@@ -951,7 +1084,7 @@
                         "recipes": {
                           "type": "array",
                           "items": {
-                            "$ref": "#/components/schemas/Recipe"
+                            "$ref": "#/components/schemas/recipe"
                           }
                         },
                         "page": {
@@ -1093,7 +1226,7 @@
                         "favorites": {
                           "type": "array",
                           "items": {
-                            "$ref": "#/components/schemas/Recipe"
+                            "$ref": "#/components/schemas/recipe"
                           }
                         },
                         "page": {
@@ -1229,7 +1362,7 @@
                         "favorites": {
                           "type": "array",
                           "items": {
-                            "$ref": "#/components/schemas/Recipe"
+                            "$ref": "#/components/schemas/recipe"
                           }
                         },
                         "page": {
@@ -1380,30 +1513,45 @@
         ],
         "properties": {
           "_id": {
+
+            "description": "User's id",
+
             "type": "string",
             "example": "65e4decdd286b30065d54af9"
           },
           "name": {
+
+            "description": "User's name",
+
             "type": "string",
             "example": "John Doe"
           },
           "email": {
+
+            "description": "User's email",
+
             "type": "string",
             "example": "john123@gmail.com"
           },
           "createdAt": {
             "type": "string",
             "format": "date-time",
+
+            "description": "User's created date",
+
             "example": "2025-03-27T19:43:21.686+00:00"
           },
           "updatedAt": {
             "type": "string",
             "format": "date-time",
-            "example": "2025-03-28T19:43:21.686+00:00"
+
+            "description": "User's updated date",
+            "example": "2025-03-27T19:43:21.686+00:00"
           }
         }
       },
-      "Category": {
+      "category": {
+
         "type": "object",
         "required": [
           "_id",
@@ -1430,7 +1578,7 @@
           }
         }
       },
-      "Ingredient": {
+      "ingredient": {
         "type": "object",
         "required": [
           "_id",
@@ -1469,48 +1617,7 @@
           }
         }
       },
-      "ingredient": {
-        "Ingredient": {
-          "type": "object",
-          "required": [
-            "_id",
-            "name",
-            "desc",
-            "img",
-            "createdAt",
-            "updatedAt"
-          ],
-          "properties": {
-            "_id": {
-              "type": "string",
-              "example": "665d14a36a70b4794fbcab34"
-            },
-            "name": {
-              "type": "string",
-              "example": "Egg"
-            },
-            "desc": {
-              "type": "string",
-              "example": "A fresh organic egg"
-            },
-            "img": {
-              "type": "string",
-              "example": "https://example.com/images/egg.jpg"
-            },
-            "createdAt": {
-              "type": "string",
-              "format": "date-time",
-              "example": "2024-06-01T12:00:00.000Z"
-            },
-            "updatedAt": {
-              "type": "string",
-              "format": "date-time",
-              "example": "2024-06-01T12:30:00.000Z"
-            }
-          }
-        }
-      },
-      "Recipe": {
+      "recipe": {
         "type": "object",
         "required": [
           "_id",
@@ -1545,10 +1652,12 @@
             "example": 45
           },
           "cals": {
-            "type": "integer",
+            "type": [
+              "integer",
+              "null"
+            ],
             "minimum": 1,
             "maximum": 10000,
-            "nullable": true,
             "example": 320
           },
           "category": {
@@ -1573,9 +1682,11 @@
             "example": "Mix all ingredients and bake at 180°C for 35 minutes."
           },
           "recipeImg": {
-            "type": "string",
+            "type": [
+              "string",
+              "null"
+            ],
             "format": "uri",
-            "nullable": true,
             "example": "https://example.com/images/recipe.jpg"
           },
           "owner": {
@@ -1760,6 +1871,43 @@
                     "message": {
                       "type": "string",
                       "example": "Contact not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "Conflict error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 409
+                },
+                "message": {
+                  "type": "string",
+                  "example": "ConflictError"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email in use"
                     }
                   }
                 }

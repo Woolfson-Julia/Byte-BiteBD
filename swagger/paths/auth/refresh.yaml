@@ -1,18 +1,23 @@
 tags:
   - Auth
-summary: Refresh token
-operationId: refreshToken
-description: Refresh user session using cookies and return a new access token
-security:
-  - bearerAuth: []
+summary: Refresh session
+operationId: refreshSession
+description: |
+  Refreshes the user's session by issuing a new access token and updating session cookies.
+
+  ⚠️ **Swagger UI does not store cookies. Please use Postman or your frontend to test this route properly.**
+security: []
 responses:
   '200':
-    description: Successfully refreshed a session and returned new access token
+    description: Successfully refreshed the session and returned a new access token
     content:
       application/json:
         schema:
           type: object
-          required: [status, message, data]
+          required:
+            - status
+            - message
+            - data
           properties:
             status:
               type: integer
@@ -22,12 +27,13 @@ responses:
               example: Successfully refreshed a session!
             data:
               type: object
-              required: [accessToken]
+              required:
+                - accessToken
               properties:
                 accessToken:
                   type: string
-                  example: Y12l/GjxtA2cV69sXhLsdqncNQCv76u2Mm0r8Fvs
+                  example: msCUebr6BGhZcOO0qNLU6JbWd0AdmBKYadwnknjq
   '401':
-    $ref: '../../components/responses/401.yaml'
+    $ref: ../../components/responses/401.yaml
   '500':
-    $ref: '../../components/responses/500.yaml'
+    $ref: ../../components/responses/500.yaml

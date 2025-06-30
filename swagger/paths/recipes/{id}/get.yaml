@@ -9,7 +9,6 @@ description: |
 Example request: |
   `GET http://localhost:3000/api/recipes/6462a8f74c3d0ddd28898016`
 security: []
-
 parameters:
   - in: path
     name: id
@@ -17,7 +16,9 @@ parameters:
     schema:
       type: string
       example: "65d7e8a4b9c3d12a5d8e9b74"
+
     description: Pass only the recipe ID
+
 
 
 responses:
@@ -40,6 +41,7 @@ responses:
               type: string
               example: 'Recipe found successfully'
             data:
+
               $ref: '../../../components/schemas/recipe.yaml#/Recipe'
             isFavorite:
               type: boolean
@@ -62,6 +64,7 @@ responses:
             message:
               type: string
               example: 'Invalid recipe ID format'
+
 
   '404':
     description: 'Recipe not found'

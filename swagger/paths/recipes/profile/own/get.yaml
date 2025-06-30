@@ -113,7 +113,7 @@ responses:
               type: string
               example: 'Recipe found successfully'
             data:
-              $ref: '../../../../components/schemas/recipe.yaml#/Recipe'
+               $ref: '../../../../components/schemas/recipe.yaml#/Recipe'
             isFavorite:
               type: boolean
               example: true
@@ -121,6 +121,7 @@ responses:
 
 
 
+ 
   '401':
     $ref: '../../../../components/responses/401.yaml'
 

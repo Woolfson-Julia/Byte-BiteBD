@@ -7,19 +7,24 @@ required:
   - updatedAt
 properties:
   _id:
+    description: User's id
     type: string
     example: 65e4decdd286b30065d54af9
   name:
+    description: User's name
     type: string
     example: John Doe
   email:
+    description: User's email
     type: string
     example: john123@gmail.com
   createdAt:
     type: string
     format: date-time
-    example: "2025-03-27T19:43:21.686+00:00"
+    description: User's created date
+    example: 2025-03-27T19:43:21.686+00:00
   updatedAt:
     type: string
     format: date-time
-    example: "2025-03-28T19:43:21.686+00:00"
+    description: User's updated date
+    example: 2025-03-27T19:43:21.686+00:00

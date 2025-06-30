@@ -21,8 +21,7 @@ responses:
             data:
               type: array
               items:
-                $ref: '../../components/schemas/ingredient.yaml#/Ingredient'
-
+                $ref: '../../components/schemas/ingredient.yaml'
   '404':
     description: Ingredients not found
     content:
@@ -36,7 +35,6 @@ responses:
             message:
               type: string
               example: No ingredients found
-
   '500':
     description: Internal server error
     content:

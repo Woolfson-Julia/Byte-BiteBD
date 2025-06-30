@@ -33,10 +33,9 @@ requestBody:
             maximum: 360
             example: 45
           cals:
-            type: integer
+            type: [integer, "null"]
             minimum: 1
             maximum: 10000
-            nullable: true
             example: 320
           category:
             type: string
@@ -85,7 +84,7 @@ responses:
               example: Successfully created a new recipe!
             data:
               type: object
-              $ref: '../../../components/schemas/recipe.yaml#/Recipe'
+              $ref: '../../../components/schemas/recipe.yaml'
   '400':
     $ref: '../../../components/responses/400.yaml'
   '401':
