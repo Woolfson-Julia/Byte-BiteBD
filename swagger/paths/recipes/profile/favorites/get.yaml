@@ -2,16 +2,29 @@ tags:
   - Recipes
 summary: Get favorite recipes of the authenticated user
 operationId: getFavorites
-description: 'Retrieve paginated list of favorite recipes for the authenticated user'
+description: >
+  Retrieve a paginated, filtered, and sorted list of recipes that the authenticated user has marked as favorites.
+
+  This endpoint allows the user to:
+
+  - Get only their favorite recipes.
+  - Apply **pagination** using `page` and `perPage` parameters.
+  - Filter recipes by **category**, **title**, or **ingredient**.
+  - Sort recipes using standard fields (`sortBy`, `sortOrder`) if available in query options.
+  - Recipes are returned in the **exact order** they were added to favorites by the user.
+
+  Useful for rendering a user's personal favorites list with proper control over display and filtering.
+
 security:
   - bearerAuth: []
+
 parameters:
   - in: query
     name: page
     schema:
       type: integer
       example: 1
-    description: Page number for pagination
+    description: Page number for pagination (starts from 1)
   - in: query
     name: perPage
     schema:
@@ -23,21 +36,19 @@ parameters:
     schema:
       type: string
       example: 'dessert'
-    description: Filter by category
+    description: Filter recipes by category
   - in: query
     name: ingredient
     schema:
       type: string
       example: 'chocolate'
-    description: Filter by ingredient
+    description: Filter recipes by a specific ingredient
   - in: query
     name: title
     schema:
       type: string
       example: 'Japanese gohan rice'
-    description: Filter by name
-
-
+    description: Filter recipes by title (case-insensitive match)
 
 responses:
   '200':
@@ -60,7 +71,7 @@ responses:
             data:
               type: object
               required:
-                - favorites
+                - recipes
                 - page
                 - perPage
                 - totalItems
@@ -68,7 +79,7 @@ responses:
                 - hasPreviousPage
                 - hasNextPage
               properties:
-                favorites:
+                recipes:
                   type: array
                   items:
                     $ref: '../../../../components/schemas/recipe.yaml'

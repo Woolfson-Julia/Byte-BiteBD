@@ -2,13 +2,13 @@
   required:
     - _id
     - title
-    - decr
-    - cookiesTime
     - category
-    - ingredients
-    - ingredientAmount
-    - instruction
     - owner
+    - instructions
+    - description
+    - time
+    - ingredients
+
   properties:
     _id:
       type: string
@@ -17,43 +17,49 @@
       type: string
       maxLength: 64
       example: "Chocolate Cake"
-    decr:
-      type: string
-      maxLength: 200
-      example: "Rich and moist cake perfect for celebrations."
-    cookiesTime:
-      type: integer
-      minimum: 1
-      maximum: 360
-      example: 45
-    cals:
-      type: [integer, "null"]
-      minimum: 1
-      maximum: 10000
-      example: 320
     category:
       type: string
-      example: "dessert"
-    ingredients:
-      type: array
-      items:
-        $ref: './ingredient.yaml'
-    ingredientAmount:
-      type: integer
-      minimum: 2
-      maximum: 16
-      example: 5
-    instruction:
-      type: string
-      maxLength: 1200
-      example: "Mix all ingredients and bake at 180°C for 35 minutes."
-    recipeImg:
-      type: [string, "null"]
-      format: uri
-      example: "https://example.com/images/recipe.jpg"
+      example: "Dessert"
     owner:
       type: string
       example: "65d123abc9876543210fedcb"
+    area:
+      type: string
+      example: "Italian"
+    instructions:
+      type: string
+      maxLength: 1200
+      example: "Mix all ingredients and bake at 180°C for 35 minutes."
+    description:
+      type: string
+      maxLength: 200
+      example: "Rich and moist cake perfect for celebrations."
+    thumb:
+      type: string
+      format: uri
+      example: "https://example.com/images/recipe.jpg"
+    time:
+      type: string
+      example: "90"
+    cals:
+      type: integer
+      nullable: true
+      minimum: 1
+      maximum: 10000
+      example: 320
+    ingredients:
+      type: array
+      items:
+        type: object
+        required:
+          - ingredient
+          - measure
+        properties:
+          ingredient:
+            $ref: './ingredient.yaml'
+          measure:
+            type: string
+            example: "4 cups"
     isFavorite:
       type: boolean
       nullable: true
@@ -66,20 +72,24 @@
       type: string
       format: date-time
       example: "2024-12-05T11:00:00Z"
+
   example:
-    _id: "6462a8f74c3d0ddd28898084"
-    title: "Japanese gohan rice"
-    category: "Side"
+    _id: "6462a8f74c3d0ddd28898067"
+    title: "Steak Diane"
+    category: "Beef"
     owner: "64c8d958249fae54bae90bb9"
-    decr: "A staple in Japanese cuisine, Gohan rice is a short-grain, sticky rice…"
-    cookiesTime: 30
-    instruction: "STEP 1\nRinsing and soaking your rice is key to achieving the perfect …"
+    area: "French"
+    instructions: "Heat oil in a 12 skillet over medium-high heat. Season steaks with salt and pepper, and add to skillet; cook, turning once, until browned on both sides and cooked to desired doneness, about 4 to 5 minutes for medium-rare. Transfer steaks to a plate, and set aside. Return skillet to high heat, and add stock; cook until reduced until to 1⁄2 cup, about 10 minutes. Pour into a bowl, and set aside. Return skillet to heat, and add butter; add garlic and shallots, and cook, stirring, until soft, about 2 minutes. Add mushrooms, and cook, stirring, until they release any liquid and it evaporates and mushrooms begin to brown, about 2 minutes. Add cognac, and light with a match to flambée; cook until flame dies down. Stir in reserved stock, cream, Dijon, Worcestershire, and hot sauce, and then return steaks to skillet; cook, turning in sauce, until warmed through and sauce is thickened, about 4 minutes. Transfer steak to serving plates and stir parsley and chives into sauce; pour sauce over steaks to serve."
+    description: "A classic French dish made with pan-seared steak, served with a sauce made from butter, shallots, mushrooms, and cream, and flavored with brandy and Worcestershire sauce."
+    thumb: "https://ftp.goit.study/img/so-yummy/preview/Steak%20Diane.jpg"
+    time: "30"
     ingredients:
-      "_id": "640c2dd963a319ea671e373f"
-      "name": "Pepper"
-      "desc": "A spice made from ground dried peppercorns, commonly used in cooking and as a table seasoning for its pungent and spicy flavor."
-      "img": "https://ftp.goit.study/img/so-yummy/ingredients/640c2dd963a319ea671e373f.png"
-    measure: "20g"
-    recipeImg: "https://ftp.goit.study/img/so-yummy/preview/Japanese%20gohan%20rice.jpg"
-    createdAt: "2023-03-11T19:25:33.247+00:00"
-    updatedAt: "2023-04-14T20:02:28.085+00:00"
+      - ingredient:
+          _id: "640c2dd963a319ea671e3838"
+          name: "Canola Oil"
+          desc: "A type of vegetable oil made from the rapeseed plant, commonly used for cooking due to its mild flavor and high smoke point."
+          img: "https://ftp.goit.study/img/so-yummy/ingredients/640c2dd963a319ea671e3838.png"
+        measure: "2 tbs"
+    isFavorite: false
+    createdAt: "2023-03-11T19:25:33.244Z"
+    updatedAt: "2023-04-14T20:02:28.085Z"

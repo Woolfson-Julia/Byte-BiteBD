@@ -4,7 +4,7 @@ export const RECIPE_SORT_KEYS = [
   '_id',
   'title',
   'cals',
-  'cookiesTime',
+  'time',
   'category',
   'createdAt',
   'updatedAt',

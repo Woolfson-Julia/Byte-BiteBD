@@ -6,29 +6,45 @@ const recipeSchema = new Schema(
       type: String,
       required: true,
       maxlength: 64,
-      trim: true, //назва
+      trim: true,
     },
-    decr: {
+    category: {
+      type: String,
+      required: true,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    area: {
+      type: String,
+      required: false,
+    },
+    instructions: {
+      type: String,
+      required: true,
+      maxlength: 1200,
+    },
+    description: {
       type: String,
       required: true,
       maxlength: 200,
-      trim: true, // короткий опис рецепту
+      trim: true,
     },
-    cookiesTime: {
-      type: Number,
+      thumb: {
+      type: String,
+      required: false,
+    },
+    time: {
+      type: String,
       required: true,
-      min: 1,
-      max: 360, // час приготування в хвилинах
     },
     cals: {
       type: Number,
       required: false,
       min: 1,
-      max: 10000, // кількість калорій
-    },
-    category: {
-      type: String,
-      required: true,
+      max: 10000,
     },
     ingredients: [
       {
@@ -43,22 +59,6 @@ const recipeSchema = new Schema(
         _id: false,
       },
     ],
-
-    instruction: {
-      type: String,
-      required: true,
-      maxlength: 1200, // детальний опис приготування
-    },
-    recipeImg: {
-      type: String,
-      required: false,
-      // фотка їдла
-    },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true, // автор рецепту
-    },
   },
   {
     timestamps: true,

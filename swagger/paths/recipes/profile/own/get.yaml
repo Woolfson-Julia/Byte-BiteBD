@@ -13,7 +13,7 @@ description: |
     "hasNextPage": false
 
 Sorting is supported on the following fields:
-  _id, name, cals, cookiesTime, category, createdAt, updatedAt
+  _id, name, cals, time, category, createdAt, updatedAt
 
 Filtering can be done by:
   - name (partial or full match)
@@ -31,7 +31,7 @@ parameters:
       - _id
       - title
       - cals
-      - cookiesTime
+      - time
       - category
       - createdAt
       - updatedAt

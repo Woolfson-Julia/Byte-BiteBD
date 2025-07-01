@@ -2,9 +2,15 @@ tags:
   - Recipes
 summary: Create a new recipe
 operationId: createRecipe
-description: 'Create a new recipe with optional photo upload'
+description: |
+  Create a new recipe with the provided data. Authentication is required.
+  If a photo file is included, it will be uploaded and its URL saved in the `thumb` field.
+  The `time` field is provided as a number but stored as a string in the database.
+  The optional `cals` field can also be provided as a number.
+
 security:
   - bearerAuth: []
+
 requestBody:
   required: true
   content:
@@ -12,36 +18,43 @@ requestBody:
       schema:
         type: object
         required:
-          - name
-          - decr
-          - cookiesTime
+          - title
           - category
+          - instructions
+          - description
+          - time
           - ingredients
-          - instruction
         properties:
-          name:
+          title:
             type: string
-            maxLength: 64
-            example: "Chocolate Cake"
-          decr:
-            type: string
-            maxLength: 200
-            example: "Rich and moist cake perfect for celebrations."
-          cookiesTime:
-            type: integer
-            minimum: 1
-            maximum: 360
-            example: 45
-          cals:
-            type: [integer, "null"]
-            minimum: 1
-            maximum: 10000
-            example: 320
+            example: "Steak Diane"
           category:
             type: string
-            example: "dessert"
+            example: "Beef"
+          area:
+            type: string
+            example: "French"
+          instructions:
+            type: string
+            example: "Heat oil in a skillet over medium-high heat..."
+          description:
+            type: string
+            example: "A classic French dish made with pan-seared steak..."
+          time:
+            type: integer
+            example: 30
+            description: "Preparation time in minutes (number input, stored as string)"
+          cals:
+            type: integer
+            example: 400
+            description: "Caloric content (optional)"
+          thumb:
+            type: string
+            format: binary
+            description: "Recipe photo file"
           ingredients:
             type: array
+            description: "List of ingredients with measure and id"
             items:
               type: object
               required:
@@ -50,23 +63,14 @@ requestBody:
               properties:
                 id:
                   type: string
-                  example: "640c2dd963a319ea671e36f9"
+                  example: "640c2dd963a319ea671e36c3"
                 measure:
                   type: string
-                  example: "200g"
-            minItems: 2
-            maxItems: 16
-          instruction:
-            type: string
-            maxLength: 1200
-            example: "Mix all ingredients and bake at 180°C for 35 minutes."
-          recipeImg:
-            type: string
-            format: binary
-            description: "Image file of the recipe"
+                  example: "2 tbs"
+
 responses:
   '201':
-    description: Successfully created a new recipe
+    description: Successfully created a new recipe!
     content:
       application/json:
         schema:
@@ -81,13 +85,50 @@ responses:
               example: 201
             message:
               type: string
-              example: Successfully created a new recipe!
+              example: "Successfully created a new recipe!"
             data:
               type: object
-              $ref: '../../../components/schemas/recipe.yaml'
+              required:
+                - recipes
+              properties:
+                recipes:
+                  $ref: '../../../components/schemas/recipe.yaml'
+
   '400':
-    $ref: '../../../components/responses/400.yaml'
+    description: Validation failed due to incorrect request data.
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: "Validation failed"
+            data:
+              type: object
+              required:
+                - message
+                - errors
+              properties:
+                message:
+                  type: string
+                  example: "Validation failed"
+                errors:
+                  type: array
+                  description: Array of validation error messages
+                  items:
+                    type: string
+                    example: "-time- is required"
+
   '401':
     $ref: '../../../components/responses/401.yaml'
+
   '500':
     $ref: '../../../components/responses/500.yaml'
