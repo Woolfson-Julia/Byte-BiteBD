@@ -2,8 +2,13 @@ tags:
   - Recipes
 summary: Get filtered and paginated list of recipes
 operationId: getRecipes
-description: 'Get a list of recipes with filtering and pagination support'
+description: >
+  Get a list of recipes with filtering, sorting, pagination, and favorite status support.
+  If the user is authenticated, each recipe will include an `isFavorite` boolean field indicating whether the recipe is in the user's favorites.
+Example request: |
+  ` GET http://localhost:3000/api/recipes?ingredient=640c2dd963a319ea671e37c2&category=Beef&sortBy=title&sortOrder=desc&page=1&limit=5`
 security: []
+
 parameters:
   - in: query
     name: page
@@ -34,12 +39,24 @@ parameters:
     schema:
       type: string
       example: 'Japanese gohan rice'
-    description: Filter by name
-
+    description: Filter by recipe title
+  - in: query
+    name: sortBy
+    schema:
+      type: string
+      example: 'title'
+    description: Field name to sort by (e.g. `title`, `createdAt`)
+  - in: query
+    name: sortOrder
+    schema:
+      type: string
+      enum: [asc, desc]
+      example: 'asc'
+    description: Sort order — ascending (`asc`) or descending (`desc`)
 
 responses:
   '200':
-    description: 'Successfully retrieved filtered list of recipes'
+    description: "Successfully found recipes!"
     content:
       application/json:
         schema:
@@ -58,18 +75,21 @@ responses:
             data:
               type: object
               required:
-                - data
-                - page
-                - perPage
-                - totalItems
-                - totalPages
-                - hasPreviousPage
-                - hasNextPage
+              - recipes
+              - page
+              - perPage
+              - totalItems
+              - totalPages
+              - hasPreviousPage
+              - hasNextPage
               properties:
-                data:
+                recipes:
                   type: array
                   items:
                     $ref: '../../components/schemas/recipe.yaml'
+                isFavorite:
+                  type: boolean
+                  example: true
                 page:
                   type: integer
                   example: 1
@@ -88,7 +108,21 @@ responses:
                 hasNextPage:
                   type: boolean
                   example: true
-  '401':
-    $ref: '../../components/responses/401.yaml'
   '404':
-    $ref: '../../components/responses/404.yaml'
+    description: 'There are no recipes matching your search!'
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: There are no recipes matching your search!
+  '500':
+    $ref: '../../components/responses/500.yaml'

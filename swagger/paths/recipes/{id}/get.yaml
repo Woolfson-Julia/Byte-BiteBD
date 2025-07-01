@@ -8,7 +8,9 @@ description: |
 
 Example request: |
   `GET http://localhost:3000/api/recipes/6462a8f74c3d0ddd28898016`
+
 security: []
+
 parameters:
   - in: path
     name: id
@@ -16,10 +18,7 @@ parameters:
     schema:
       type: string
       example: "65d7e8a4b9c3d12a5d8e9b74"
-
     description: Pass only the recipe ID
-
-
 
 responses:
   '200':
@@ -31,7 +30,7 @@ responses:
           required:
             - status
             - message
-            - data
+            - recipes
             - isFavorite
           properties:
             status:
@@ -40,7 +39,7 @@ responses:
             message:
               type: string
               example: 'Recipe found successfully'
-            data:
+            recipes:
               $ref: '../../../components/schemas/recipe.yaml'
             isFavorite:
               type: boolean
