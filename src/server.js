@@ -15,10 +15,8 @@ export const setupServer = () => {
   const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true,
+  origin: '*',
 }));
-
 
   
   app.use(cors());
