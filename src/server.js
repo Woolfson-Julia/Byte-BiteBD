@@ -18,12 +18,7 @@ app.use(cors({
   origin: '*',
 }));
 
-  
-  app.use(cors());
 
-
-
-  
   app.use(
     pino({
       transport: {
