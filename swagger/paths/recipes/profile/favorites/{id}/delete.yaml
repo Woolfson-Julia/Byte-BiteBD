@@ -2,28 +2,66 @@ tags:
   - Recipes
 summary: Remove a recipe from favorites
 operationId: removeFavorite
-description: 'Remove a recipe from the authenticated user favorites list'
+description: >
+  Deletes a recipe from the authenticated user's favorites list.
+  Requires authentication.
+
+  The response returns the remaining favorite recipes with pagination, sorting, and filtering applied.
+  The recipes are sorted in the exact order they are stored on the backend in the user's favorites list.
 security:
-  - bearerAuth: []
+  bearerAuth: []
 parameters:
-  - in: path
-    name: recipeId
+  - name: recipeId
+    in: path
+    description: ID of the recipe to remove from favorites
     required: true
     schema:
       type: string
-      example: "65d7e8a4b9c3d12a5d8e9b74"
-    description: ID of the recipe to remove from favorites
+      example: "60a7c0f2e13e3a3d9c1f1234"
+  - name: page
+    in: query
+    description: Page number for pagination (default 1)
+    required: false
+    schema:
+      type: integer
+      example: 1
+  - name: perPage
+    in: query
+    description: Number of recipes per page (default 10)
+    required: false
+    schema:
+      type: integer
+      example: 10
+  - name: sortBy
+    in: query
+    description: Field to sort by (e.g., "title", "createdAt")
+    required: false
+    schema:
+      type: string
+      example: "createdAt"
+  - name: sortOrder
+    in: query
+    description: Sort order, either "asc" or "desc"
+    required: false
+    schema:
+      type: string
+      enum: [asc, desc]
+      example: "asc"
+  - name: filter
+    in: query
+    description: JSON string to filter recipes by fields
+    required: false
+    schema:
+      type: string
+      example: '{"category": "dessert"}'
+
 responses:
   '200':
-    description: Recipe removed from favorites successfully
+    description: Recipe successfully removed from favorites
     content:
       application/json:
         schema:
           type: object
-          required:
-            - status
-            - message
-            - data
           properties:
             status:
               type: integer
@@ -33,20 +71,40 @@ responses:
               example: Recipe removed from favorites successfully
             data:
               type: object
-              required:
-                - favorites
               properties:
-                favorites:
+                recipes:
                   type: array
                   items:
-                    type: string
-                    example: "65d7e8a4b9c3d12a5d8e9b74"
-                  description: List of recipe IDs still in favorites after removal
-  '400':
-    $ref: '../../../../../components/responses/400.yaml'
-  '401':
-    $ref: '../../../../../components/responses/401.yaml'
-  '404':
-    $ref: '../../../../../components/responses/404.yaml'
-  '500':
-    $ref: '../../../../../components/responses/500.yaml'
+                    $ref: '../../../../../components/schemas/recipe.yaml'
+                page:
+                  type: integer
+                  example: 1
+                perPage:
+                  type: integer
+                  example: 10
+                totalItems:
+                  type: integer
+                  example: 25
+                totalPages:
+                  type: integer
+                  example: 3
+                hasPreviousPage:
+                  type: boolean
+                  example: false
+                hasNextPage:
+                  type: boolean
+                  example: true
+'400':
+  description: Recipe ID is missing or invalid
+  content:
+    application/json:
+      schema:
+        $ref: '../../../../../components/responses/400.yaml'
+'404':
+  description: User not found or Recipe not in favorites
+  content:
+    application/json:
+       schema:
+        $ref: '../../../../../components/responses/404.yaml'
+'500':
+  $ref: '../../../../../components/responses/500.yaml'

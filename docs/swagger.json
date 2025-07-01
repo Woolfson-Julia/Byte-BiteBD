@@ -934,10 +934,6 @@
                       "properties": {
                         "recipes": {
                           "$ref": "#/components/schemas/recipe"
-                        },
-                        "isFavorite": {
-                          "type": "boolean",
-                          "example": true
                         }
                       }
                     }
@@ -1175,7 +1171,7 @@
         ],
         "summary": "Get favorite recipes of the authenticated user",
         "operationId": "getFavorites",
-        "description": "Retrieve paginated list of favorite recipes for the authenticated user",
+        "description": "Retrieve a paginated, filtered, and sorted list of recipes that the authenticated user has marked as favorites.\nThis endpoint allows the user to:\n- Get only their favorite recipes. - Apply **pagination** using `page` and `perPage` parameters. - Filter recipes by **category**, **title**, or **ingredient**. - Sort recipes using standard fields (`sortBy`, `sortOrder`) if available in query options. - Recipes are returned in the **exact order** they were added to favorites by the user.\nUseful for rendering a user's personal favorites list with proper control over display and filtering.\n",
         "security": [
           {
             "bearerAuth": []
@@ -1189,7 +1185,7 @@
               "type": "integer",
               "example": 1
             },
-            "description": "Page number for pagination"
+            "description": "Page number for pagination (starts from 1)"
           },
           {
             "in": "query",
@@ -1207,7 +1203,7 @@
               "type": "string",
               "example": "dessert"
             },
-            "description": "Filter by category"
+            "description": "Filter recipes by category"
           },
           {
             "in": "query",
@@ -1216,7 +1212,7 @@
               "type": "string",
               "example": "chocolate"
             },
-            "description": "Filter by ingredient"
+            "description": "Filter recipes by a specific ingredient"
           },
           {
             "in": "query",
@@ -1225,7 +1221,7 @@
               "type": "string",
               "example": "Japanese gohan rice"
             },
-            "description": "Filter by name"
+            "description": "Filter recipes by title (case-insensitive match)"
           }
         ],
         "responses": {
@@ -1252,7 +1248,7 @@
                     "data": {
                       "type": "object",
                       "required": [
-                        "favorites",
+                        "recipes",
                         "page",
                         "perPage",
                         "totalItems",
@@ -1261,7 +1257,7 @@
                         "hasNextPage"
                       ],
                       "properties": {
-                        "favorites": {
+                        "recipes": {
                           "type": "array",
                           "items": {
                             "$ref": "#/components/schemas/recipe"
@@ -1313,35 +1309,13 @@
         "tags": [
           "Recipes"
         ],
-        "summary": "Add a recipe to favorites and get paginated favorite recipes",
+        "summary": "Add recipe to favorites",
         "operationId": "addToFavorites",
-        "description": "Add a recipe to the authenticated user favorites list and return paginated favorites",
+        "description": "Adds a recipe to the user's favorites list. Returns a paginated, filtered, and sorted list of favorite recipes, ordered by the sequence in which they were added (newest first). Supports filtering by category, ingredient, and name, plus sorting by predefined fields.\n",
+        "Example request": "`POST http://localhost:3000/api/recipes/profile/favorites`\n",
         "security": [
           {
             "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "page",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "default": 1
-            },
-            "description": "Page number for pagination"
-          },
-          {
-            "in": "query",
-            "name": "limit",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 50,
-              "default": 12
-            },
-            "description": "Number of favorite recipes per page"
           }
         ],
         "requestBody": {
@@ -1356,17 +1330,95 @@
                 "properties": {
                   "recipeId": {
                     "type": "string",
-                    "example": "65d7e8a4b9c3d12a5d8e9b74",
-                    "description": "ID of the recipe to add to favorites"
+                    "description": "The ID of the recipe to add to favorites",
+                    "example": "6462a8f74c3d0ddd28898019"
                   }
                 }
               }
             }
           }
         },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            },
+            "description": "Page number for pagination (default is 1)"
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer",
+              "default": 12,
+              "minimum": 1,
+              "maximum": 50
+            },
+            "description": "Number of items per page (default is 12, max 50)"
+          },
+          {
+            "in": "query",
+            "name": "sortBy",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "_id",
+                "title",
+                "cals",
+                "time",
+                "category",
+                "createdAt",
+                "updatedAt"
+              ],
+              "default": "createdAt"
+            },
+            "description": "Field to sort the favorite recipes by"
+          },
+          {
+            "in": "query",
+            "name": "sortOrder",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "desc"
+            },
+            "description": "Sort order (ascending or descending)"
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter recipes by category (exact match)"
+          },
+          {
+            "in": "query",
+            "name": "ingredient",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter recipes by ingredient name (partial match)"
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter recipes by recipe title/name (partial match)"
+          }
+        ],
         "responses": {
-          "201": {
-            "description": "Successfully created a new recipe!",
+          "200": {
+            "description": "Recipe added to favorites",
             "content": {
               "application/json": {
                 "schema": {
@@ -1379,16 +1431,16 @@
                   "properties": {
                     "status": {
                       "type": "integer",
-                      "example": 201
+                      "example": 200
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully created a new recipe!"
+                      "example": "Recipe added to favorites"
                     },
                     "data": {
                       "type": "object",
                       "required": [
-                        "favorites",
+                        "recipes",
                         "page",
                         "perPage",
                         "totalItems",
@@ -1397,8 +1449,9 @@
                         "hasNextPage"
                       ],
                       "properties": {
-                        "favorites": {
+                        "recipes": {
                           "type": "array",
+                          "description": "List of favorite recipes in order of addition",
                           "items": {
                             "$ref": "#/components/schemas/recipe"
                           }
@@ -1413,7 +1466,217 @@
                         },
                         "totalItems": {
                           "type": "integer",
-                          "example": 34
+                          "example": 4
+                        },
+                        "totalPages": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "hasPreviousPage": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Recipe ID is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Recipe ID is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User or Recipe not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User or Recipe not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/recipes/profile/favorites/{recipeId}": {
+      "delete": {
+        "400": {
+          "description": "Recipe ID is missing or invalid",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../../../../../components/responses/400.yaml"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "User not found or Recipe not in favorites",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../../../../../components/responses/404.yaml"
+              }
+            }
+          }
+        },
+        "500": {
+          "$ref": "../../../../../components/responses/500.yaml"
+        },
+        "tags": [
+          "Recipes"
+        ],
+        "summary": "Remove a recipe from favorites",
+        "operationId": "removeFavorite",
+        "description": "Deletes a recipe from the authenticated user's favorites list. Requires authentication.\nThe response returns the remaining favorite recipes with pagination, sorting, and filtering applied. The recipes are sorted in the exact order they are stored on the backend in the user's favorites list.\n",
+        "security": {
+          "bearerAuth": []
+        },
+        "parameters": [
+          {
+            "name": "recipeId",
+            "in": "path",
+            "description": "ID of the recipe to remove from favorites",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "60a7c0f2e13e3a3d9c1f1234"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination (default 1)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "description": "Number of recipes per page (default 10)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 10
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Field to sort by (e.g., \"title\", \"createdAt\")",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "description": "Sort order, either \"asc\" or \"desc\"",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "example": "asc"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "JSON string to filter recipes by fields",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "{\"category\": \"dessert\"}"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recipe successfully removed from favorites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Recipe removed from favorites successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "recipes": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/recipe"
+                          }
+                        },
+                        "page": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "perPage": {
+                          "type": "integer",
+                          "example": 10
+                        },
+                        "totalItems": {
+                          "type": "integer",
+                          "example": 25
                         },
                         "totalPages": {
                           "type": "integer",
@@ -1433,100 +1696,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "$ref": "#/components/responses/400"
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          },
-          "404": {
-            "$ref": "#/components/responses/404"
-          },
-          "500": {
-            "$ref": "#/components/responses/500"
-          }
-        }
-      }
-    },
-    "/recipes/profile/favorites/{recipeId}": {
-      "delete": {
-        "tags": [
-          "Recipes"
-        ],
-        "summary": "Remove a recipe from favorites",
-        "operationId": "removeFavorite",
-        "description": "Remove a recipe from the authenticated user favorites list",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "recipeId",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "65d7e8a4b9c3d12a5d8e9b74"
-            },
-            "description": "ID of the recipe to remove from favorites"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Recipe removed from favorites successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status",
-                    "message",
-                    "data"
-                  ],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Recipe removed from favorites successfully"
-                    },
-                    "data": {
-                      "type": "object",
-                      "required": [
-                        "favorites"
-                      ],
-                      "properties": {
-                        "favorites": {
-                          "type": "array",
-                          "items": {
-                            "type": "string",
-                            "example": "65d7e8a4b9c3d12a5d8e9b74"
-                          },
-                          "description": "List of recipe IDs still in favorites after removal"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/400"
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          },
-          "404": {
-            "$ref": "#/components/responses/404"
-          },
-          "500": {
-            "$ref": "#/components/responses/500"
           }
         }
       }
