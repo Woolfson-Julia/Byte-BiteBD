@@ -66,16 +66,20 @@
                   "name": {
                     "description": "User's name",
                     "type": "string",
+                    "maxLength": 16,
                     "example": "John Doe"
                   },
                   "email": {
                     "description": "User's email",
                     "type": "string",
+                    "maxLength": 128,
                     "example": "john123@gmail.com"
                   },
                   "password": {
                     "description": "User's password",
                     "type": "string",
+                    "minLength": 8,
+                    "maxLength": 128,
                     "example": "examplepwd123"
                   }
                 }
@@ -160,11 +164,14 @@
                   "email": {
                     "description": "User's email",
                     "type": "string",
+                    "maxLength": 128,
                     "example": "john123@gmail.com"
                   },
                   "password": {
                     "description": "User's password",
                     "type": "string",
+                    "minLength": 8,
+                    "maxLength": 128,
                     "example": "examplepwd123"
                   }
                 }
@@ -846,6 +853,7 @@
                 "properties": {
                   "title": {
                     "type": "string",
+                    "maxLength": 64,
                     "example": "Steak Diane"
                   },
                   "category": {
@@ -858,19 +866,25 @@
                   },
                   "instructions": {
                     "type": "string",
+                    "maxLength": 1200,
                     "example": "Heat oil in a skillet over medium-high heat..."
                   },
                   "description": {
                     "type": "string",
+                    "maxLength": 200,
                     "example": "A classic French dish made with pan-seared steak..."
                   },
                   "time": {
                     "type": "integer",
+                    "minimum": 1,
+                    "maximum": 360,
                     "example": 30,
                     "description": "Preparation time in minutes (number input, stored as string)"
                   },
                   "cals": {
                     "type": "integer",
+                    "minimum": 1,
+                    "maximum": 10000,
                     "example": 400,
                     "description": "Caloric content (optional)"
                   },
@@ -881,6 +895,8 @@
                   },
                   "ingredients": {
                     "type": "array",
+                    "minItems": 2,
+                    "maxItems": 16,
                     "description": "List of ingredients with measure and id",
                     "items": {
                       "type": "object",
@@ -1331,6 +1347,7 @@
                   "recipeId": {
                     "type": "string",
                     "description": "The ID of the recipe to add to favorites",
+                    "pattern": "^[a-fd]{24}$",
                     "example": "6462a8f74c3d0ddd28898019"
                   }
                 }

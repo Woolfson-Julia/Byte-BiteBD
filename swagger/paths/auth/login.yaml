@@ -17,10 +17,13 @@ requestBody:
           email:
             description: User's email
             type: string
+            maxLength: 128
             example: john123@gmail.com
           password:
             description: User's password
             type: string
+            minLength: 8
+            maxLength: 128
             example: examplepwd123
 responses:
   '200':
