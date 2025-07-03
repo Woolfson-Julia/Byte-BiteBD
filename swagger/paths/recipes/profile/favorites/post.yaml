@@ -25,6 +25,7 @@ requestBody:
           recipeId:
             type: string
             description: The ID of the recipe to add to favorites
+            pattern: "^[a-fd]{24}$"
             example: "6462a8f74c3d0ddd28898019"
 
 parameters:
