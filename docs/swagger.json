@@ -823,7 +823,7 @@
         }
       }
     },
-    "/recipes/add-recipe": {
+    "/recipes/": {
       "post": {
         "tags": [
           "Recipes"

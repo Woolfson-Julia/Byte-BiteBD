@@ -53,9 +53,9 @@ paths:
   /recipes/{id}:
     get:
       $ref: ../swagger/paths/recipes/{id}/get.yaml
-  /recipes/add-recipe:
+  /recipes/:
     post:
-      $ref: ../swagger/paths/recipes/add-recipe/post.yaml
+      $ref: ../swagger/paths/recipes//post.yaml
   /recipes/profile/own:
     get:
       $ref: ../swagger/paths/recipes/profile/own/get.yaml
