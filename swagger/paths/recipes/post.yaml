@@ -101,7 +101,7 @@ responses:
                 - recipes
               properties:
                 recipes:
-                  $ref: '../../../components/schemas/recipe.yaml'
+                  $ref: '../../components/schemas/recipe.yaml'
 
   '400':
     description: Validation failed due to incorrect request data.
@@ -137,7 +137,7 @@ responses:
                     example: "-time- is required"
 
   '401':
-    $ref: '../../../components/responses/401.yaml'
+    $ref: '../../components/responses/401.yaml'
 
   '500':
-    $ref: '../../../components/responses/500.yaml'
+    $ref: '../../components/responses/500.yaml'

@@ -711,119 +711,7 @@
             "$ref": "#/components/responses/500"
           }
         }
-      }
-    },
-    "/recipes/{id}": {
-      "get": {
-        "tags": [
-          "Recipes"
-        ],
-        "summary": "Get a single recipe by its ID",
-        "operationId": "getRecipeById",
-        "description": "Retrieve detailed information about a specific recipe using its unique ID.\nOptionally supports authentication — if a valid access token is provided, the response will include a `isFavorite` field indicating whether the recipe is in the user's favorites list.\n",
-        "Example request": "`GET http://localhost:3000/api/recipes/6462a8f74c3d0ddd28898016`\n",
-        "security": [],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "65d7e8a4b9c3d12a5d8e9b74"
-            },
-            "description": "Pass only the recipe ID"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Recipe found successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status",
-                    "message",
-                    "recipes",
-                    "isFavorite"
-                  ],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Recipe found successfully"
-                    },
-                    "recipes": {
-                      "$ref": "#/components/schemas/recipe"
-                    },
-                    "isFavorite": {
-                      "type": "boolean",
-                      "example": true
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid recipe ID format",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status",
-                    "message"
-                  ],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 400
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Invalid recipe ID format"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Recipe not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status",
-                    "message"
-                  ],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 404
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Recipe not found"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "$ref": "#/components/responses/500"
-          }
-        }
-      }
-    },
-    "/recipes/add-recipe": {
+      },
       "post": {
         "tags": [
           "Recipes"
@@ -1006,6 +894,116 @@
           },
           "401": {
             "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/recipes/{id}": {
+      "get": {
+        "tags": [
+          "Recipes"
+        ],
+        "summary": "Get a single recipe by its ID",
+        "operationId": "getRecipeById",
+        "description": "Retrieve detailed information about a specific recipe using its unique ID.\nOptionally supports authentication — if a valid access token is provided, the response will include a `isFavorite` field indicating whether the recipe is in the user's favorites list.\n",
+        "Example request": "`GET http://localhost:3000/api/recipes/6462a8f74c3d0ddd28898016`\n",
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "65d7e8a4b9c3d12a5d8e9b74"
+            },
+            "description": "Pass only the recipe ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recipe found successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "recipes",
+                    "isFavorite"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Recipe found successfully"
+                    },
+                    "recipes": {
+                      "$ref": "#/components/schemas/recipe"
+                    },
+                    "isFavorite": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid recipe ID format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid recipe ID format"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recipe not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Recipe not found"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
             "$ref": "#/components/responses/500"
