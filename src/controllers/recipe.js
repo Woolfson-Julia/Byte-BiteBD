@@ -100,7 +100,7 @@ if (req.user) {
 };
 
 // ================================ADD NEW RECIPET=======================================
-// http://localhost:3000/api/recipes/
+// http://localhost:3000/api/recipes
 
 export const createRecipe = async (req, res, next) => {
   const ownerId = req.user._id;
