@@ -367,3 +367,37 @@ export const getFavorites = async (req, res, next) => {
       },
     });
 };
+
+
+
+
+// =================================removeMyRecipe=============================
+
+export const removeMyRecipe = async (req, res, next) => {
+  const userId = req.user._id;
+  const recipeId = req.params.id;
+
+  if (!recipeId) {
+    throw createHttpError(400, 'Recipe ID is required');
+  }
+
+  const recipe = await Recipe.findById(recipeId);
+
+  if (!recipe) {
+    throw createHttpError(404, 'Recipe not found');
+  }
+
+  if (recipe.owner?.toString() !== userId.toString()) {
+    throw createHttpError(403, 'You can only remove your own recipe');
+  }
+
+  // Замість видалення — ставимо owner: null
+  recipe.owner = null;
+  await recipe.save();
+
+  res.status(200).json({
+    status: 200,
+    message: 'Recipe successfully removed from your profile',
+    data: { recipeId },
+  });
+};
