@@ -23,8 +23,21 @@ export const getRecipes = async (req, res) => {
 
   const total = await Recipe.countDocuments(filter);
 
-   if (!recipes || recipes.length === 0) {
-      throw createHttpError(404, 'There are no recipes matching your search!'); }
+if (!recipes || recipes.length === 0) {
+  return res.status(200).json({
+    status: 200,
+    message: 'No recipes found',
+    data: {
+      recipes: [],
+      page,
+      perPage,
+      totalItems: 0,
+      totalPages: 0,
+      hasPreviousPage: false,
+      hasNextPage: false,
+    },
+  });
+}
 
   const enrichedRecipes = await getEnrichedRecipes(recipes);
 
@@ -134,7 +147,21 @@ export const getMyRecipes = async (req, res, next) => {
   filter.owner = ownerId;
 
   const totalItems = await Recipe.countDocuments(filter);
-    if (totalItems === 0) { throw createHttpError(404, 'There are no recipes yet!'); }
+if (totalItems === 0) {
+  return res.status(200).json({
+    status: 200,
+    message: 'No recipes found',
+    data: {
+      recipes: [],
+      page,
+      perPage,
+      totalItems: 0,
+      totalPages: 0,
+      hasPreviousPage: false,
+      hasNextPage: false,
+    },
+  });
+}
 
   const findRecipes = await Recipe.find(filter)
     .collation({ locale: 'en', strength: 2 })
@@ -166,8 +193,7 @@ export const getMyRecipes = async (req, res, next) => {
     });
   };
 
-
-// ================================ADD RECIPET IN FAVORITES =======================================
+// ================================ADD RECIPET TO FAVORITES =======================================
 // http://localhost:3000/api/recipes/profile/favorites
 export const addToFavorites = async (req, res, next) => {
   try {
@@ -205,6 +231,22 @@ export const addToFavorites = async (req, res, next) => {
     // Загальна кількість
     const totalItems = await Recipe.countDocuments(filter);
     const totalPages = Math.ceil(totalItems / perPage);
+
+    if (totalItems === 0) {
+  return res.status(200).json({
+    status: 200,
+    message: 'No favorite recipes found',
+    data: {
+      recipes: [],
+      page,
+      perPage,
+      totalItems: 0,
+      totalPages: 0,
+      hasPreviousPage: false,
+      hasNextPage: false,
+    },
+  });
+}
 
     // Отримуємо всі рецепти з урахуванням фільтра, сортування, пагінації
     const recipes = await Recipe.find(filter)
@@ -281,6 +323,22 @@ export const removeFavorite = async (req, res, next) => {
     const totalItems = await Recipe.countDocuments(filter);
     const totalPages = Math.ceil(totalItems / perPage);
 
+    if (totalItems === 0) {
+  return res.status(200).json({
+    status: 200,
+    message: 'No favorite recipes found',
+    data: {
+      recipes: [],
+      page,
+      perPage,
+      totalItems: 0,
+      totalPages: 0,
+      hasPreviousPage: false,
+      hasNextPage: false,
+    },
+  });
+}
+
     // Отримуємо рецепти з урахуванням пагінації і сортування (тимчасово без унікального сортування по favorites)
     const recipes = await Recipe.find(filter)
       .collation({ locale: 'en', strength: 2 })
@@ -323,19 +381,42 @@ export const getFavorites = async (req, res, next) => {
 
     const favoriteIds = user.favorites.map(id => id.toString());
 
-    if (favoriteIds.length === 0) {
-      throw createHttpError(404, 'No favorite recipes found');
-    }
+if (favoriteIds.length === 0) {
+  return res.status(200).json({
+    status: 200,
+    message: 'No favorite recipes found',
+    data: {
+      recipes: [],
+      page,
+      perPage,
+      totalItems: 0,
+      totalPages: 0,
+      hasPreviousPage: false,
+      hasNextPage: false,
+    },
+  });
+}
 
     // Обмежуємо пошук рецептами з favorites
     filter._id = { $in: favoriteIds };
 
     // Рахуємо загальну кількість
     const totalItems = await Recipe.countDocuments(filter);
-    if (totalItems === 0) {
-      throw createHttpError(404, 'No favorite recipes found matching your criteria');
-    }
-
+if (totalItems === 0) {
+  return res.status(200).json({
+    status: 200,
+    message: 'No favorite recipes found',
+    data: {
+      recipes: [],
+      page,
+      perPage,
+      totalItems: 0,
+      totalPages: 0,
+      hasPreviousPage: false,
+      hasNextPage: false,
+    },
+  });
+}
     // Вибираємо всі відповідні рецепти без пагінації для правильного сортування
     const allFavorites = await Recipe.find(filter)
       .collation({ locale: 'en', strength: 2 })
@@ -367,9 +448,6 @@ export const getFavorites = async (req, res, next) => {
       },
     });
 };
-
-
-
 
 // =================================removeMyRecipe=============================
 

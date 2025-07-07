@@ -151,7 +151,6 @@ responses:
               type: string
               example: 'Recipe ID is required'
 
-
   '404':
     description: 'User or Recipe not found'
     content:

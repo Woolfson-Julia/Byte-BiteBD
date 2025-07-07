@@ -683,30 +683,6 @@
               }
             }
           },
-          "404": {
-            "description": "There are no recipes matching your search!",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status",
-                    "message"
-                  ],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 404
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "There are no recipes matching your search!"
-                    }
-                  }
-                }
-              }
-            }
-          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -1148,30 +1124,6 @@
           "401": {
             "$ref": "#/components/responses/401"
           },
-          "404": {
-            "description": "There are no recipes yet!",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status",
-                    "message"
-                  ],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 404
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "There are no recipes yet!"
-                    }
-                  }
-                }
-              }
-            }
-          },
           "500": {
             "$ref": "#/components/responses/500"
           }
@@ -1399,9 +1351,6 @@
           },
           "401": {
             "$ref": "#/components/responses/401"
-          },
-          "404": {
-            "$ref": "#/components/responses/404"
           },
           "500": {
             "$ref": "#/components/responses/500"

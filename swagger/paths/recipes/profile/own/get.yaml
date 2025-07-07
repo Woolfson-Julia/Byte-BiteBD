@@ -111,21 +111,5 @@ responses:
   '401':
     $ref: '../../../../components/responses/401.yaml'
 
-  '404':
-    description: There are no recipes yet!
-    content:
-      application/json:
-        schema:
-          type: object
-          required:
-            - status
-            - message
-          properties:
-            status:
-              type: integer
-              example: 404
-            message:
-              type: string
-              example: There are no recipes yet!
   '500':
     $ref: '../../../../components/responses/500.yaml'
