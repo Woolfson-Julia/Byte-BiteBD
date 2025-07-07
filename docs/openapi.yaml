@@ -58,12 +58,15 @@ paths:
   /recipes/profile/own:
     get:
       $ref: ../swagger/paths/recipes/profile/own/get.yaml
+  /recipes/profile/own/{id}:
+    delete:
+      $ref: ../swagger/paths/recipes/profile/own/{id}/delete.yaml
   /recipes/profile/favorites:
     get:
       $ref: ../swagger/paths/recipes/profile/favorites/get.yaml
     post:
       $ref: ../swagger/paths/recipes/profile/favorites/post.yaml
-  /recipes/profile/favorites/{recipeId}:
+  /recipes/profile/favorites/{id}:
     delete:
       $ref: ../swagger/paths/recipes/profile/favorites/{id}/delete.yaml
 components:

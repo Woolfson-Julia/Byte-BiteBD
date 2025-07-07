@@ -41,11 +41,7 @@ responses:
                   example: "60a7c0f2e13e3a3d9c1f1234"
 
   '400':
-    description: Recipe ID is missing or invalid
-    content:
-      application/json:
-        schema:
-          $ref: '../../../../../components/responses/400.yaml'
+    $ref: '../../../../../components/responses/400.yaml'
 
   '403':
     description: User attempted to delete a recipe they do not own
@@ -65,11 +61,7 @@ responses:
               example: Forbidden
 
   '404':
-    description: Recipe not found
-    content:
-      application/json:
-        schema:
-          $ref: '../../../../../components/responses/404.yaml'
+    $ref: '../../../../../components/responses/404.yaml'
 
   '500':
     $ref: '../../../../../components/responses/500.yaml'
