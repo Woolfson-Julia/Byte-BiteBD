@@ -1,0 +1,75 @@
+tags:
+  - Recipes
+summary: Remove a user's own recipe
+operationId: removeMyRecipe
+description: >
+  Marks the user's own recipe as removed by setting its `owner` field to null.
+  This effectively detaches the recipe from the authenticated user, while keeping it in the database.
+  Requires authentication.
+
+security:
+  bearerAuth: []
+
+parameters:
+  - name: id
+    in: path
+    description: ID of the recipe to remove from user's profile
+    required: true
+    schema:
+      type: string
+      example: "60a7c0f2e13e3a3d9c1f1234"
+
+responses:
+  '200':
+    description: Recipe successfully removed from user's profile
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Recipe successfully removed from your profile
+            data:
+              type: object
+              properties:
+                recipeId:
+                  type: string
+                  example: "60a7c0f2e13e3a3d9c1f1234"
+
+  '400':
+    description: Recipe ID is missing or invalid
+    content:
+      application/json:
+        schema:
+          $ref: '../../../../../components/responses/400.yaml'
+
+  '403':
+    description: User attempted to delete a recipe they do not own
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            statusCode:
+              type: integer
+              example: 403
+            message:
+              type: string
+              example: You can only remove your own recipe
+            error:
+              type: string
+              example: Forbidden
+
+  '404':
+    description: Recipe not found
+    content:
+      application/json:
+        schema:
+          $ref: '../../../../../components/responses/404.yaml'
+
+  '500':
+    $ref: '../../../../../components/responses/500.yaml'

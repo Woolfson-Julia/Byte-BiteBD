@@ -6,7 +6,8 @@ import {
   getMyRecipes,
   addToFavorites,
   removeFavorite,
-  getFavorites
+  getFavorites,
+  removeMyRecipe
 } from '../controllers/recipe.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { authenticate } from '../middlewares/authenticate.js';
@@ -41,5 +42,9 @@ router.get('/profile/favorites', authenticate, ctrlWrapper(getFavorites));
 
 // DELETE favorites
 router.delete('/profile/favorites/:recipeId', authenticate, ctrlWrapper(removeFavorite));
+
+// DELETE my pecipe
+router.delete('/profile/own/:id', authenticate, ctrlWrapper(removeMyRecipe));
+
 
 export default router;

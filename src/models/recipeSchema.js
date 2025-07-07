@@ -15,7 +15,7 @@ const recipeSchema = new Schema(
     owner: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: false,
     },
     area: {
       type: String,
