@@ -115,9 +115,12 @@ if (req.user) {
 // ================================ADD NEW RECIPET=======================================
 // http://localhost:3000/api/recipes
 
+const defaultPhotoUrl =
+  'https://ftp.goit.study/img/so-yummy/preview/large/Vietnamese%20Grilled%20Pork%20_bun-thit-nuong_.jpg';
+
 export const createRecipe = async (req, res, next) => {
   const ownerId = req.user._id;
-  const photoUrl = req.file ? await getPhotoUrl(req.file) : null;
+  const photoUrl = req.file ? await getPhotoUrl(req.file) : defaultPhotoUrl;
 
   const newRecipeData = {
     ...req.body,
