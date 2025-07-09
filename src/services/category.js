@@ -4,7 +4,7 @@ import { Category } from '../models/categorySchema.js';
 
 export const getAllCategories = async () => {
   try {
-    const categories = await Category.find();
+    const categories = await Category.find().sort({ name: 1 });
     return categories;
   } catch (error) {
     throw createHttpError(500, `Failed to fetch categories - ${error.message}`);
