@@ -3,7 +3,7 @@ import { Ingredient } from '../models/ingredientSchema.js';
 
 export const getAllIngredients = async () => {
   try {
-    const ingredients = await Ingredient.find();
+    const ingredients = await Ingredient.find().sort({ name: 1 });
     return ingredients;
   } catch (error) {
     throw createHttpError(
