@@ -5,7 +5,8 @@ operationId: getRecipes
 description: >
   Get a list of recipes with filtering, sorting, pagination, and favorite status support.
   If the user is authenticated, each recipe will include an `isFavorite` boolean field indicating whether the recipe is in the user's favorites.
-Example request: |
+
+  **Example request:**  
   ` GET http://localhost:3000/api/recipes?ingredient=640c2dd963a319ea671e37c2&category=Beef&sortBy=title&sortOrder=desc&page=1&limit=5`
 security: []
 
@@ -87,9 +88,9 @@ responses:
                   type: array
                   items:
                     $ref: '../../components/schemas/recipe.yaml'
-                isFavorite:
-                  type: boolean
-                  example: true
+                # isFavorite:
+                #   type: boolean
+                #   example: true
                 page:
                   type: integer
                   example: 1
@@ -108,6 +109,8 @@ responses:
                 hasNextPage:
                   type: boolean
                   example: true
-
   '500':
     $ref: '../../components/responses/500.yaml'
+  '401':
+    $ref: ../../components/responses/401.yaml
+

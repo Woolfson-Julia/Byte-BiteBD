@@ -8,7 +8,7 @@ description: >
   ordered by the sequence in which they were added (newest first).
   Supports filtering by category, ingredient, and name, plus sorting by predefined fields.
 
-Example request: |
+  **Example request:**
   `POST http://localhost:3000/api/recipes/profile/favorites`
 
 security:

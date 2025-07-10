@@ -102,7 +102,6 @@ responses:
               properties:
                 recipes:
                   $ref: '../../components/schemas/recipe.yaml'
-
   '400':
     description: Validation failed due to incorrect request data.
     content:

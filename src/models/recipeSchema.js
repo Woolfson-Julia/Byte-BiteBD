@@ -32,7 +32,7 @@ const recipeSchema = new Schema(
       maxlength: 200,
       trim: true,
     },
-      thumb: {
+    thumb: {
       type: String,
       required: false,
     },
