@@ -537,8 +537,7 @@
         ],
         "summary": "Get filtered and paginated list of recipes",
         "operationId": "getRecipes",
-        "description": "Get a list of recipes with filtering, sorting, pagination, and favorite status support. If the user is authenticated, each recipe will include an `isFavorite` boolean field indicating whether the recipe is in the user's favorites.\n",
-        "Example request": "` GET http://localhost:3000/api/recipes?ingredient=640c2dd963a319ea671e37c2&category=Beef&sortBy=title&sortOrder=desc&page=1&limit=5`\n",
+        "description": "Get a list of recipes with filtering, sorting, pagination, and favorite status support. If the user is authenticated, each recipe will include an `isFavorite` boolean field indicating whether the recipe is in the user's favorites.\n**Example request:**   ` GET http://localhost:3000/api/recipes?ingredient=640c2dd963a319ea671e37c2&category=Beef&sortBy=title&sortOrder=desc&page=1&limit=5`\n",
         "security": [],
         "parameters": [
           {
@@ -648,10 +647,6 @@
                             "$ref": "#/components/schemas/recipe"
                           }
                         },
-                        "isFavorite": {
-                          "type": "boolean",
-                          "example": true
-                        },
                         "page": {
                           "type": "integer",
                           "example": 1
@@ -682,6 +677,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
           },
           "500": {
             "$ref": "#/components/responses/500"
@@ -884,8 +882,7 @@
         ],
         "summary": "Get a single recipe by its ID",
         "operationId": "getRecipeById",
-        "description": "Retrieve detailed information about a specific recipe using its unique ID.\nOptionally supports authentication — if a valid access token is provided, the response will include a `isFavorite` field indicating whether the recipe is in the user's favorites list.\n",
-        "Example request": "`GET http://localhost:3000/api/recipes/6462a8f74c3d0ddd28898016`\n",
+        "description": "Retrieve detailed information about a specific recipe using its unique ID.\nOptionally supports authentication — if a valid access token is provided, the response will include a `isFavorite` field indicating whether the recipe is in the user's favorites list.\n\n**Example request:**\n`GET http://localhost:3000/api/recipes/6462a8f74c3d0ddd28898016`\n",
         "security": [],
         "parameters": [
           {
@@ -994,13 +991,7 @@
         ],
         "summary": "Get all recipes added by the user with pagination, sorting, and filtering",
         "operationId": "getMyRecipes",
-        "description": "Retrieve all recipes added by the authenticated user with support for pagination, sorting, and filtering.\nThe response includes pagination info:\n  \"page\": 1,\n  \"perPage\": 12,\n  \"totalItems\": 4,\n  \"totalPages\": 1,\n  \"hasPreviousPage\": false,\n  \"hasNextPage\": false\n",
-        "Sorting is supported on the following fields": "_id, name, cals, time, category, createdAt, updatedAt",
-        "Filtering can be done by": [
-          "name (partial or full match)",
-          "category",
-          "isFavorite (whether the recipe is marked as favorite by the user)"
-        ],
+        "description": "Retrieve all recipes added by the authenticated user with support for pagination, sorting, and filtering.\nThe response includes pagination info:\n  \"page\": 1,\n  \"perPage\": 12,\n  \"totalItems\": 4,\n  \"totalPages\": 1,\n  \"hasPreviousPage\": false,\n  \"hasNextPage\": false\n\nSorting is supported on the following fields:\n_id, name, cals, time, category, createdAt, updatedAt\n\nFiltering can be done by:\n- name (partial or full match)\n- category\n- isFavorite (whether the recipe is marked as favorite by the user)\n",
         "security": [
           {
             "bearerAuth": []
@@ -1138,9 +1129,11 @@
         "summary": "Remove a user's own recipe",
         "operationId": "removeMyRecipe",
         "description": "Marks the user's own recipe as removed by setting its `owner` field to null. This effectively detaches the recipe from the authenticated user, while keeping it in the database. Requires authentication.\n",
-        "security": {
-          "bearerAuth": []
-        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -1363,8 +1356,7 @@
         ],
         "summary": "Add recipe to favorites",
         "operationId": "addToFavorites",
-        "description": "Adds a recipe to the user's favorites list. Returns a paginated, filtered, and sorted list of favorite recipes, ordered by the sequence in which they were added (newest first). Supports filtering by category, ingredient, and name, plus sorting by predefined fields.\n",
-        "Example request": "`POST http://localhost:3000/api/recipes/profile/favorites`\n",
+        "description": "Adds a recipe to the user's favorites list. Returns a paginated, filtered, and sorted list of favorite recipes, ordered by the sequence in which they were added (newest first). Supports filtering by category, ingredient, and name, plus sorting by predefined fields.\n**Example request:** `POST http://localhost:3000/api/recipes/profile/favorites`\n",
         "security": [
           {
             "bearerAuth": []
@@ -1596,41 +1588,20 @@
     },
     "/recipes/profile/favorites/{id}": {
       "delete": {
-        "400": {
-          "description": "Recipe ID is missing or invalid",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "../../../../../components/responses/400.yaml"
-              }
-            }
-          }
-        },
-        "404": {
-          "description": "User not found or Recipe not in favorites",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "../../../../../components/responses/404.yaml"
-              }
-            }
-          }
-        },
-        "500": {
-          "$ref": "../../../../../components/responses/500.yaml"
-        },
         "tags": [
           "Recipes"
         ],
         "summary": "Remove a recipe from favorites",
         "operationId": "removeFavorite",
         "description": "Deletes a recipe from the authenticated user's favorites list. Requires authentication.\nThe response returns the remaining favorite recipes with pagination, sorting, and filtering applied. The recipes are sorted in the exact order they are stored on the backend in the user's favorites list.\n",
-        "security": {
-          "bearerAuth": []
-        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
-            "name": "recipeId",
+            "name": "id",
             "in": "path",
             "description": "ID of the recipe to remove from favorites",
             "required": true,
@@ -1749,6 +1720,29 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Recipe ID is missing or invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found or Recipe not in favorites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/404"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
           }
         }
       }
@@ -1762,6 +1756,106 @@
       }
     },
     "schemas": {
+      "400": {
+        "description": "Bad request due to validation error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 400
+                },
+                "message": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "example": "ID should be an ObjectId"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "example": [
+                          "\"email\" must be a valid email"
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "oneOf": [
+                        {
+                          "type": "string",
+                          "example": "ID should be an ObjectId"
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "example": [
+                              "\"email\" must be a valid email"
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "The requested contact or route was not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Contact not found"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Contact not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "user": {
         "type": "object",
         "required": [
@@ -1921,8 +2015,10 @@
             "example": "90"
           },
           "cals": {
-            "type": "integer",
-            "nullable": true,
+            "type": [
+              "integer",
+              "null"
+            ],
             "minimum": 1,
             "maximum": 10000,
             "example": 320
@@ -1947,8 +2043,10 @@
             }
           },
           "isFavorite": {
-            "type": "boolean",
-            "nullable": true,
+            "type": [
+              "boolean",
+              "null"
+            ],
             "example": true
           },
           "createdAt": {

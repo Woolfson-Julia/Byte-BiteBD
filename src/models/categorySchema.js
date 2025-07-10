@@ -10,3 +10,4 @@ const categorySchema = new Schema({
 });
 
 export const Category = model('Category', categorySchema);
+

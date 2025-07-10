@@ -12,10 +12,10 @@ description: |
     "hasPreviousPage": false,
     "hasNextPage": false
 
-Sorting is supported on the following fields:
+  Sorting is supported on the following fields:
   _id, name, cals, time, category, createdAt, updatedAt
 
-Filtering can be done by:
+  Filtering can be done by:
   - name (partial or full match)
   - category
   - isFavorite (whether the recipe is marked as favorite by the user)
@@ -99,7 +99,7 @@ responses:
               type: string
               example: 'Recipe found successfully'
             data:
-               $ref: '../../../../components/schemas/recipe.yaml'
+              $ref: '../../../../components/schemas/recipe.yaml'
             isFavorite:
               type: boolean
               example: true

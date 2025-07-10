@@ -9,8 +9,8 @@ responses:
   '204':
     description: Successfully logged out. No content is returned.
   '401':
-    $ref: ../../components/responses/401.yaml
+    $ref: '../../components/responses/401.yaml'
   '404':
-    $ref: ../../components/responses/404.yaml
+    $ref: '../../components/responses/404.yaml'
   '500':
-    $ref: ../../components/responses/500.yaml
+    $ref: '../../components/responses/500.yaml'

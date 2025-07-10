@@ -50,13 +50,13 @@ responses:
                 - accessToken
               properties:
                 user:
-                  $ref: ../../components/schemas/user.yaml
+                  $ref: '../../components/schemas/user.yaml'
                 accessToken:
                   type: string
                   example: msCUebr6BGhZcOO0qNLU6JbWd0AdmBKYadwnknjq
   '400':
-    $ref: ../../components/responses/400.yaml
+    $ref: '../../components/responses/400.yaml'
   '401':
-    $ref: ../../components/responses/401.yaml
+    $ref: '../../components/responses/401.yaml'
   '500':
-    $ref: ../../components/responses/500.yaml
+    $ref: '../../components/responses/500.yaml'

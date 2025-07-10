@@ -1,14 +1,17 @@
+/* eslint-disable no-unused-vars */
 import { Recipe } from '../models/recipeSchema.js';
 import { UsersCollection } from '../models/userSchema.js';
 import createHttpError from 'http-errors';
-import { parsePaginationParams } from '../utils/parsePaginationParams.js';
-import { parseRecipeFilterParams } from '../utils/parseRecipeFilterParams.js';
-import { parseSortParams } from '../utils/parseSortParams.js';
+// import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+// import { parseRecipeFilterParams } from '../utils/parseRecipeFilterParams.js';
+// import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseQueryOptions } from '../utils/parseQueryOptions.js';
 import { getPhotoUrl } from '../utils/getPhotoUrl.js';
 import { isRecipeFavorite } from '../utils/isRecipeFavorite.js';
 import mongoose from 'mongoose';
 import { getEnrichedRecipes, getEnrichedRecipe } from '../services/ingredient.js';
+import { getFavoritesCount } from '../utils/getFavoritesCount.js';
+
 
 // ================================FIND ALL RECIPES=======================================
 // http://localhost:3000/api/recipes?ingredient=640c2dd963a319ea671e36f9
@@ -42,10 +45,16 @@ if (!recipes || recipes.length === 0) {
   const enrichedRecipes = await getEnrichedRecipes(recipes);
 
     if (req.user) {
-      const favoritesChecks = enrichedRecipes.map(async (recipe) => {
-        const isFavorite = await isRecipeFavorite(req.user._id, recipe._id);
-        return { ...recipe, isFavorite };
-      });
+      // const favoritesChecks = enrichedRecipes.map(async (recipe) => {
+      //   const isFavorite = await isRecipeFavorite(req.user._id, recipe._id);
+      //   return { ...recipe, isFavorite };
+      // });
+    const favoritesChecks = enrichedRecipes.map(async (recipe) => {
+      const isFavorite = await isRecipeFavorite(req.user._id, recipe._id);
+      const favoritesCount = await getFavoritesCount(recipe._id);
+
+      return { ...recipe, isFavorite, favoritesCount };
+    });
 
     const enrichedWithFavorites = await Promise.all(favoritesChecks);
 
@@ -63,12 +72,18 @@ if (!recipes || recipes.length === 0) {
         },
       });
     } else {
+      const recipesWithCount = await Promise.all(
+        enrichedRecipes.map(async (recipe) => {
+          const favoritesCount = await getFavoritesCount(recipe._id);
+          return { ...recipe, favoritesCount };
+        }),
+      );
       // Якщо користувача немає — повертаємо без поля isFavorite
       res.json({
         status: 200,
         message: 'Successfully found recipes!',
         data: {
-          recipes: enrichedRecipes,
+          recipes: recipesWithCount,
           page,
           perPage,
           totalItems: total,

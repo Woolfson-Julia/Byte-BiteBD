@@ -6,8 +6,9 @@ description: |
   Retrieve detailed information about a specific recipe using its unique ID.
   Optionally supports authentication — if a valid access token is provided, the response will include a `isFavorite` field indicating whether the recipe is in the user's favorites list.
 
-Example request: |
+  **Example request:**
   `GET http://localhost:3000/api/recipes/6462a8f74c3d0ddd28898016`
+
 
 security: []
 

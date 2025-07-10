@@ -9,9 +9,9 @@ description: >
   The response returns the remaining favorite recipes with pagination, sorting, and filtering applied.
   The recipes are sorted in the exact order they are stored on the backend in the user's favorites list.
 security:
-  bearerAuth: []
+  - bearerAuth: []
 parameters:
-  - name: recipeId
+  - name: id
     in: path
     description: ID of the recipe to remove from favorites
     required: true
@@ -94,17 +94,17 @@ responses:
                 hasNextPage:
                   type: boolean
                   example: true
-'400':
-  description: Recipe ID is missing or invalid
-  content:
-    application/json:
-      schema:
-        $ref: '../../../../../components/responses/400.yaml'
-'404':
-  description: User not found or Recipe not in favorites
-  content:
-    application/json:
-       schema:
-        $ref: '../../../../../components/responses/404.yaml'
-'500':
-  $ref: '../../../../../components/responses/500.yaml'
+  '400':
+    description: Recipe ID is missing or invalid
+    content:
+      application/json:
+        schema:
+          $ref: '../../../../../components/responses/400.yaml'
+  '404':
+    description: User not found or Recipe not in favorites
+    content:
+      application/json:
+        schema:
+          $ref: '../../../../../components/responses/404.yaml'
+  '500':
+    $ref: '../../../../../components/responses/500.yaml'
